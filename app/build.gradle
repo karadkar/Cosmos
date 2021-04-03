@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "29.0.3"
+    defaultConfig {
+        applicationId "io.github.karadkar.sample"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation Libraries.kotlinStdlibJdk7
+    implementation Libraries.appcompat
+    implementation Libraries.coreKtx
+
+    implementation Libraries.lifecycleReactiveStreamExtension
+    implementation Libraries.lifecycleExtensions // live-data view-model
+
+    implementation Libraries.constraintLayout
+    implementation Libraries.materialComponents
+    implementation Libraries.swipeRefreashLayout
+
+    testImplementation Libraries.junit
+    testImplementation Libraries.truthAssersions
+    testImplementation Libraries.mockk
+    testImplementation Libraries.coreTesting
+
+    androidTestImplementation Libraries.testRunner
+    androidTestImplementation Libraries.espressoCore
+    androidTestImplementation Libraries.truthAssersions
+
+    implementation Libraries.rxJava2
+    implementation Libraries.rxAndroid2
+}
