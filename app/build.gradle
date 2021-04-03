@@ -51,4 +51,8 @@ dependencies {
 
     implementation Libraries.rxJava2
     implementation Libraries.rxAndroid2
+
+    implementation Libraries.retrofit
+    implementation Libraries.retrofitJacksonConverter
+    implementation Libraries.retrofitRxJava2Adapter
 }
