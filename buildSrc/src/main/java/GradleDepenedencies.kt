@@ -3,6 +3,7 @@
  * check https://handstandsam.com/2018/02/11/kotlin-buildsrc-for-better-gradle-dependency-management/
  */
 object Versions {
+    const val okHttpLogger = "4.3.0"
     const val gradlePlugin = "4.1.2"
     const val archExtensions = "2.1.0"
     const val roomDb = "2.2.3"
@@ -36,6 +37,7 @@ object Libraries {
     const val retrofit = "com.squareup.retrofit2:retrofit:2.6.0"
     const val retrofitJacksonConverter = "com.squareup.retrofit2:converter-jackson:2.6.0"
     const val retrofitRxJava2Adapter = "com.squareup.retrofit2:adapter-rxjava2:2.5.0"
+    const val okHttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttpLogger}"
 
     const val kaptRealmFieldHelper = "dk.ilios:realmfieldnameshelper:1.1.1"
     const val kaptDatabindingCompiler = "com.android.databinding:compiler:${Versions.gradlePlugin}"
@@ -48,6 +50,8 @@ object Libraries {
     const val espressoCore = "androidx.test.espresso:espresso-core:3.2.0"
     const val truthAssersions = "com.google.truth:truth:0.42" // assertions
     const val mockk = "io.mockk:mockk:1.9.3"
+    const val mockWebServer = "com.squareup.okhttp3:mockwebserver:4.9.0"
+    const val koinTest = "org.koin:koin-test:${Versions.koinVersion}"
 
     // use same version as lifecycle to  avoid issue https://stackoverflow.com/q/55336613/2804351
     const val coreTesting = "androidx.arch.core:core-testing:${Versions.archExtensions}"

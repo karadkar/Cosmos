@@ -44,6 +44,8 @@ dependencies {
     testImplementation Libraries.truthAssersions
     testImplementation Libraries.mockk
     testImplementation Libraries.coreTesting
+    testImplementation Libraries.mockWebServer
+    testImplementation Libraries.koinTest
 
     androidTestImplementation Libraries.testRunner
     androidTestImplementation Libraries.espressoCore
@@ -55,4 +57,7 @@ dependencies {
     implementation Libraries.retrofit
     implementation Libraries.retrofitJacksonConverter
     implementation Libraries.retrofitRxJava2Adapter
+    implementation Libraries.okHttpLoggingInterceptor
+
+    implementation Libraries.koinViewModel
 }

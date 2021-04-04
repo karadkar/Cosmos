@@ -34,4 +34,32 @@ class NasaImageResponse {
     companion object {
         const val dateFormat = "yyyy-MM-dd"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is NasaImageResponse) return false
+
+        if (copyright != other.copyright) return false
+        if (date != other.date) return false
+        if (explanation != other.explanation) return false
+        if (imageUrlHd != other.imageUrlHd) return false
+        if (mediaType != other.mediaType) return false
+        if (serviceVersion != other.serviceVersion) return false
+        if (title != other.title) return false
+        if (imageUrlSd != other.imageUrlSd) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = copyright.hashCode()
+        result = 31 * result + (date?.hashCode() ?: 0)
+        result = 31 * result + explanation.hashCode()
+        result = 31 * result + imageUrlHd.hashCode()
+        result = 31 * result + mediaType.hashCode()
+        result = 31 * result + serviceVersion.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + imageUrlSd.hashCode()
+        return result
+    }
 }
