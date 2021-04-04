@@ -1,10 +1,14 @@
 package io.github.karadkar.sample.data
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSetter
 import java.util.*
 
 class NasaImageResponse {
+
+    @JsonIgnore
+    var id: String = ""
 
     @JsonSetter("copyright")
     var copyright: String = ""
@@ -39,6 +43,7 @@ class NasaImageResponse {
         if (this === other) return true
         if (other !is NasaImageResponse) return false
 
+        if (id != other.id) return false
         if (copyright != other.copyright) return false
         if (date != other.date) return false
         if (explanation != other.explanation) return false
@@ -52,7 +57,8 @@ class NasaImageResponse {
     }
 
     override fun hashCode(): Int {
-        var result = copyright.hashCode()
+        var result = id.hashCode()
+        result = 31 * result + copyright.hashCode()
         result = 31 * result + (date?.hashCode() ?: 0)
         result = 31 * result + explanation.hashCode()
         result = 31 * result + imageUrlHd.hashCode()

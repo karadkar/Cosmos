@@ -1,11 +1,11 @@
 package io.github.karadkar.sample.data
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.truth.Truth.assertThat
 import io.github.karadkar.sample.nasaPicturesAppKoinModules
 import io.github.karadkar.sample.utils.AppConstants
 import io.github.karadkar.sample.utils.ResourceFileReader
+import io.github.karadkar.sample.utils.readValue
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -53,8 +53,7 @@ class NasaPicturesApiServiceTest : KoinTest {
         val testSub = apiService.getImages().test()
         testSub.assertComplete()
 
-        val expectedImageResponseList: List<NasaImageResponse> =
-            get<ObjectMapper>().readValue(nasaImagesJsonData, object : TypeReference<List<NasaImageResponse>>() {})
+        val expectedImageResponseList: List<NasaImageResponse> = get<ObjectMapper>().readValue(nasaImagesJsonData)
 
         testSub.assertValue(expectedImageResponseList)
 

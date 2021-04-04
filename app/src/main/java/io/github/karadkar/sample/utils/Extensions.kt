@@ -2,6 +2,7 @@ package io.github.karadkar.sample.utils
 
 import android.view.View
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.reactivex.disposables.CompositeDisposable
@@ -23,4 +24,8 @@ fun ObjectMapper.configureCommon(): ObjectMapper {
     this.setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
 
     return this
+}
+
+inline fun <reified T> ObjectMapper.readValue(jsonData: String): T {
+    return this.readValue(jsonData, object : TypeReference<T>() {})
 }

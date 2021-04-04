@@ -3,6 +3,7 @@ package io.github.karadkar.sample
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.data.NasaPicturesApiService
 import io.github.karadkar.sample.utils.AppConstants
 import io.github.karadkar.sample.utils.AppConstants.ModuleNames
@@ -67,4 +68,7 @@ val nasaPicturesAppKoinModules = module {
         return@single retrofit.create(NasaPicturesApiService::class.java)
     }
 
+    single<NasaImageRepository> {
+        return@single NasaImageRepository(apiService = get())
+    }
 }
