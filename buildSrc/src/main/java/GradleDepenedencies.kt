@@ -9,7 +9,7 @@ object Versions {
     const val roomDb = "2.2.3"
     const val realmDbGradlePlugin = "5.12.0"
     const val kotlin = "1.4.30"
-    const val koinVersion = "2.1.6"
+    const val koinVersion = "2.2.0"
 }
 
 object Libraries {
