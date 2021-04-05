@@ -75,8 +75,10 @@ class NasaPicturesViewModelTest {
 
     @Test
     fun `ImageClickEvent results in OpenImageDetailScreenEffect`() {
+        viewModel.submitEvent(ScreenLoadEvent)
         viewModel.submitEvent(ImageClickEvent(imageId = "id-99"))
         viewEffectTester.apply {
+            assertNoErrors()
             assertValueCount(1)
             assertValueAt(0, OpenImageDetailScreenEffect(imageId = "id-99"))
         }

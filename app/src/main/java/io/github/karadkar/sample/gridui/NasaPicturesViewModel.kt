@@ -113,7 +113,7 @@ class NasaPicturesViewModel(
     }
 
     private fun Observable<Lce<out NasaPicturesEventResult>>.resultToViewEffect(): Observable<NasaPicturesViewEffect> {
-        return filter { it is Lce.Content }
+        return filter { it is Lce.Content && it.content is ImageClickResult }
             .map { (it as Lce.Content).content }
             .map<NasaPicturesViewEffect> { eventResult ->
                 when (eventResult) {
