@@ -13,7 +13,9 @@ data class NasaPicturesViewState(
     val gridItems: List<NasaPictureGridItem> = emptyList(),
     val showProgressBar: Boolean = false,
     val errorMessage: String? = null
-)
+) {
+    fun showBlankSlate(): Boolean = gridItems.isEmpty()
+}
 
 sealed class NasaPicturesViewEffect {
     data class OpenImageDetailScreenEffect(val imageId: String) : NasaPicturesViewEffect()
