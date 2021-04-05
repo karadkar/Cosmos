@@ -16,7 +16,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
 
-        <activity android:name=".NasaPicturesActivity">
+        <activity android:name=".gridui.NasaPicturesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

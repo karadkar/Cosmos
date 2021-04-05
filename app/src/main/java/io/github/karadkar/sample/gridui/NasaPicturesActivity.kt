@@ -1,4 +1,4 @@
-package io.github.karadkar.sample
+package io.github.karadkar.sample.gridui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
