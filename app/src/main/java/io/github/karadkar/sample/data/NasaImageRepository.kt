@@ -1,12 +1,13 @@
 package io.github.karadkar.sample.data
 
-import io.reactivex.Single
+import io.github.karadkar.sample.utils.logError
+import io.reactivex.Observable
 
 class NasaImageRepository(
     private val apiService: NasaPicturesApiService,
 ) {
 
-    fun fetchImages(): Single<List<NasaImageResponse>> {
+    fun fetchImages(): Observable<List<NasaImageResponse>> {
         return apiService.getImages()
             .map { response ->
                 return@map response

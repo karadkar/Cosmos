@@ -7,7 +7,7 @@ import io.github.karadkar.sample.utils.ResourceFileReader
 import io.github.karadkar.sample.utils.readValue
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Single
+import io.reactivex.Observable
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -51,7 +51,7 @@ class NasaImageRepositoryTest : KoinTest {
     fun `fetch images returns list in descending order of date and creates id from index`() {
         every {
             mockApiService.getImages()
-        } returns Single.just(imageResponseList.shuffled())
+        } returns Observable.just(imageResponseList.shuffled())
 
         val observer = repository.fetchImages().test()
         observer.assertComplete()
