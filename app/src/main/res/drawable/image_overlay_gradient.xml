@@ -7,7 +7,4 @@
         android:centerColor="#004d4d4d"
         android:endColor="#004d4d4d" />
     <corners android:radius="0dp" />
-
-    <!--    android:startColor="#cc000000"-->
-    <!--    android:endColor="#004d4d4d"-->
 </shape>
