@@ -5,12 +5,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.data.NasaPicturesApiService
+import io.github.karadkar.sample.gridui.NasaPicturesViewModel
 import io.github.karadkar.sample.utils.AppConstants
 import io.github.karadkar.sample.utils.AppConstants.ModuleNames
+import io.github.karadkar.sample.utils.AppRxSchedulers
+import io.github.karadkar.sample.utils.AppRxSchedulersProvider
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -70,5 +74,13 @@ val nasaPicturesAppKoinModules = module {
 
     single<NasaImageRepository> {
         return@single NasaImageRepository(apiService = get())
+    }
+
+    single<AppRxSchedulers> {
+        return@single AppRxSchedulersProvider()
+    }
+
+    viewModel {
+        return@viewModel NasaPicturesViewModel(repository = get(), rxSchedulers = get())
     }
 }

@@ -3,4 +3,5 @@
     <string name="welcome_to_travelmate">Welcome to TravelMate</string>
     <string name="format_custome_name">Hi %s,</string>
     <string name="price_per_person">Price per person</string>
+    <string name="nasa_image_in_grid_item">Nasa image in grid item</string>
 </resources>

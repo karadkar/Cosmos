@@ -9,6 +9,9 @@ class NasaImageRepository(
 
     fun fetchImages(): Observable<List<NasaImageResponse>> {
         return apiService.getImages()
+            .doOnError {
+                logError("error fetching images", it)
+            }
             .map { response ->
                 return@map response
                     .filter { it.date != null }
