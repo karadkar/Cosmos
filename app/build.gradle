@@ -40,6 +40,7 @@ dependencies {
     implementation Libraries.materialComponents
     implementation Libraries.swipeRefreashLayout
     implementation Libraries.picasso
+    implementation Libraries.touchImageView
 
     testImplementation Libraries.junit
     testImplementation Libraries.truthAssersions
