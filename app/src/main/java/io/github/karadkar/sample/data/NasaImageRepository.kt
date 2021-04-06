@@ -5,6 +5,7 @@ import io.reactivex.Observable
 
 class NasaImageRepository(
     private val apiService: NasaPicturesApiService,
+    private val imageCache: LinkedHashMap<String, NasaImageResponse> = LinkedHashMap()
 ) {
 
     fun fetchImages(): Observable<List<NasaImageResponse>> {
@@ -12,15 +13,18 @@ class NasaImageRepository(
             .doOnError {
                 logError("error fetching images", it)
             }
-            .map { response ->
-                return@map response
+            .map { responses ->
+                return@map responses
                     .filter { it.date != null }
                     .sortedByDescending { it.date }
-                    .also {
-                        it.forEachIndexed { index, nasaImageResponse ->
+                    .also { _responses ->
+                        _responses.forEachIndexed { index, nasaImageResponse ->
                             nasaImageResponse.id = "id-$index"
+                            imageCache[nasaImageResponse.id] = nasaImageResponse
                         }
                     }
             }
     }
+
+    fun getImageResponse(imageId: String): NasaImageResponse? = imageCache[imageId]
 }
