@@ -41,6 +41,7 @@ class PictureDetailFragment : Fragment() {
     }
 
     companion object {
+        //TODO: pass all data as Parcel object and get rid of view-model in fragment
         private const val KEY_IMAGE_ID = "key.fragment.picture.imageId"
         fun getInstance(imageId: String): PictureDetailFragment {
             return PictureDetailFragment().also {

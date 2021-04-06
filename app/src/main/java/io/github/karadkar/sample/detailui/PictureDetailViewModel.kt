@@ -7,6 +7,7 @@ class PictureDetailViewModel(
     private val repository: NasaImageRepository
 ) : ViewModel() {
     private val pictureDetails = LinkedHashMap<String, PictureDetail>()
+    private val imageIds = mutableListOf<String>()
 
     init {
         repository.getImages().values.forEach { value ->
@@ -16,10 +17,12 @@ class PictureDetailViewModel(
                 title = value.title,
                 description = value.explanation
             )
+            imageIds.add(value.id)
         }
     }
 
     fun getPictureDetail(imageId: String): PictureDetail = pictureDetails[imageId]!!
+    fun getPictureDetail(indexPosition: Int): PictureDetail = pictureDetails[imageIds[indexPosition]]!!
     fun getTotalCount(): Int = pictureDetails.size
-    fun getTotalImageIds(): List<String> = pictureDetails.keys.toList()
+    fun getTotalImageIds(): List<String> = imageIds
 }
