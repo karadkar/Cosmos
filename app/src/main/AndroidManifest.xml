@@ -16,13 +16,20 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
 
-        <activity android:name=".gridui.NasaPicturesActivity">
+        <activity
+            android:name=".detailui.PictureDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".gridui.NasaPicturesActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

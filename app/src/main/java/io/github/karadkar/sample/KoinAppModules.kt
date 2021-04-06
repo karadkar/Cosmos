@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.data.NasaPicturesApiService
+import io.github.karadkar.sample.detailui.PictureDetailViewModel
 import io.github.karadkar.sample.gridui.NasaPicturesViewModel
 import io.github.karadkar.sample.utils.AppConstants
 import io.github.karadkar.sample.utils.AppConstants.ModuleNames
@@ -82,5 +83,8 @@ val nasaPicturesAppKoinModules = module {
 
     viewModel {
         return@viewModel NasaPicturesViewModel(repository = get(), rxSchedulers = get())
+    }
+    viewModel {
+        return@viewModel PictureDetailViewModel(repository = get())
     }
 }

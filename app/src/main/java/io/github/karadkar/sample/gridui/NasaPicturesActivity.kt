@@ -1,11 +1,12 @@
 package io.github.karadkar.sample.gridui
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import io.github.karadkar.sample.R
 import io.github.karadkar.sample.databinding.ActivityNasaPicturesBinding
+import io.github.karadkar.sample.detailui.PictureDetailActivity
 import io.github.karadkar.sample.utils.addTo
 import io.github.karadkar.sample.utils.logError
 import io.github.karadkar.sample.utils.logInfo
@@ -78,7 +79,9 @@ class NasaPicturesActivity : AppCompatActivity() {
     private fun triggerViewEffect(effect: NasaPicturesViewEffect) {
         when (effect) {
             is NasaPicturesViewEffect.OpenImageDetailScreenEffect -> {
-                Toast.makeText(this, "open details for id ${effect.imageId}", Toast.LENGTH_SHORT).show()
+                startActivity(
+                    Intent(this, PictureDetailActivity::class.java)
+                )
             }
         }
     }
