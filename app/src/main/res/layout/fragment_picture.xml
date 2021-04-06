@@ -4,10 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/iv_picture"
+    <com.ortiz.touchview.TouchImageView
+        android:id="@+id/tiv_picture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:src="@tools:sample/backgrounds/scenic"
-        android:contentDescription="@string/description_picture_in_detail_screen" />
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/description_picture_in_detail_screen"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </FrameLayout>

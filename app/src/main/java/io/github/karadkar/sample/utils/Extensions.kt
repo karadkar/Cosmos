@@ -16,6 +16,14 @@ fun View.visibleOrGone(visible: Boolean) {
     this.visibility = if (visible) View.VISIBLE else View.GONE
 }
 
+fun View.visible() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
 fun ObjectMapper.configureCommon(): ObjectMapper {
     // don't fail on unknown properties
     this.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

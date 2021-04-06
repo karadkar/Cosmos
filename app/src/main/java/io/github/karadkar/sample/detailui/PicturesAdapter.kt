@@ -11,6 +11,6 @@ class PicturesAdapter(
     override fun getCount(): Int = imageIds.size
 
     override fun getItem(position: Int): Fragment {
-        return FragmentPicture.getInstance(imageIds[position])
+        return PictureDetailFragment.getInstance(imageIds[position])
     }
 }
