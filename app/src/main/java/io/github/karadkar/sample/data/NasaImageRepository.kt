@@ -27,4 +27,6 @@ class NasaImageRepository(
     }
 
     fun getImageResponse(imageId: String): NasaImageResponse? = imageCache[imageId]
+
+    fun getImages(): Map<String, NasaImageResponse> = imageCache
 }

@@ -81,4 +81,11 @@ class NasaImageRepositoryTest {
             }
         }
     }
+
+    @Test
+    fun `getImages returns cached map`() {
+        every { mockApiService.getImages() } returns Observable.just(imageResponseList)
+        repository.fetchImages().test().assertComplete()
+        assertThat(repository.getImages()).isEqualTo(imageCache)
+    }
 }
