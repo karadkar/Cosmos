@@ -1,8 +1,6 @@
 <resources>
-    <string name="app_name">Sample App</string>
-    <string name="welcome_to_travelmate">Welcome to TravelMate</string>
-    <string name="format_custome_name">Hi %s,</string>
-    <string name="price_per_person">Price per person</string>
+    <string name="app_name">Nasa Pictures</string>
+
     <string name="nasa_image_in_grid_item">Nasa image in grid item</string>
     <string name="description_home_blank_slate">blank slate for home screen</string>
     <string name="pull_down_to_refresh">Pull down to refresh</string>
