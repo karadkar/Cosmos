@@ -14,6 +14,7 @@ data class NasaPicturesViewState(
     val showProgressBar: Boolean = false
 ) {
     fun showBlankSlate(): Boolean = gridItems.isEmpty()
+    fun showGrid(): Boolean = gridItems.isNotEmpty()
 }
 
 sealed class NasaPicturesViewEffect {
@@ -23,11 +24,12 @@ sealed class NasaPicturesViewEffect {
 
 sealed class NasaPicturesViewEvent {
     object ScreenLoadEvent : NasaPicturesViewEvent()
+    object RefreshScreenEvent : NasaPicturesViewEvent()
     data class ImageClickEvent(val imageId: String) : NasaPicturesViewEvent()
 }
 
 sealed class NasaPicturesEventResult {
-    data class ScreenLoadResult(val imageResponses: List<NasaImageResponse>) : NasaPicturesEventResult()
+    data class FetchPicturesResult(val imageResponses: List<NasaImageResponse>) : NasaPicturesEventResult()
     data class ImageClickResult(val imageId: String) : NasaPicturesEventResult()
     object InProgressResult : NasaPicturesEventResult()
     data class ErrorResult(val throwable: Throwable?) : NasaPicturesEventResult()

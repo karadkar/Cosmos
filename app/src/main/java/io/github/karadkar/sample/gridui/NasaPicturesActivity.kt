@@ -9,7 +9,6 @@ import io.github.karadkar.sample.databinding.ActivityNasaPicturesBinding
 import io.github.karadkar.sample.detailui.PictureDetailActivity
 import io.github.karadkar.sample.utils.addTo
 import io.github.karadkar.sample.utils.logError
-import io.github.karadkar.sample.utils.logInfo
 import io.github.karadkar.sample.utils.visibleOrGone
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -60,7 +59,7 @@ class NasaPicturesActivity : AppCompatActivity() {
             rvPictures.layoutManager = layoutManager
             rvPictures.addItemDecoration(itemDecorator)
             swipeRefreshLayout.setOnRefreshListener {
-                swipeRefreshLayout.isRefreshing = false
+                viewModel.submitEvent(NasaPicturesViewEvent.ScreenLoadEvent)
             }
 
         }
@@ -69,11 +68,10 @@ class NasaPicturesActivity : AppCompatActivity() {
     private fun renderViewSate(state: NasaPicturesViewState) {
         binding.apply {
             swipeRefreshLayout.isRefreshing = state.showProgressBar
-            rvPictures.visibleOrGone(!state.showProgressBar)
+            rvPictures.visibleOrGone(state.showGrid())
             blankSlate.visibleOrGone(state.showBlankSlate())
         }
         adapter.submitList(state.gridItems)
-        logInfo("---< $state")
     }
 
     private fun triggerViewEffect(effect: NasaPicturesViewEffect) {

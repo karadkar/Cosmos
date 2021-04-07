@@ -55,6 +55,7 @@ class NasaPicturesViewModel(
         return publish { o ->
             Observable.merge(
                 o.ofType(ScreenLoadEvent::class.java).onScreenLoadResult(),
+                o.ofType(RefreshScreenEvent::class.java).onRefreshScreenResult(),
                 o.ofType(ImageClickEvent::class.java).onImageClickResult()
             )
         }
@@ -62,13 +63,23 @@ class NasaPicturesViewModel(
 
     private fun Observable<ScreenLoadEvent>.onScreenLoadResult(): Observable<out NasaPicturesEventResult> {
         return this.switchMap {
-            return@switchMap repository.fetchImages()
-                .subscribeOn(rxSchedulers.io())
-                .observeOn(rxSchedulers.main())
-                .map<NasaPicturesEventResult> { ScreenLoadResult(it) }
-                .onErrorReturn { ErrorResult(it) }
-                .startWith(InProgressResult)
+            return@switchMap fetchPictures()
         }
+    }
+
+    private fun Observable<RefreshScreenEvent>.onRefreshScreenResult(): Observable<out NasaPicturesEventResult> {
+        return this.switchMap {
+            return@switchMap fetchPictures()
+        }
+    }
+
+    private fun fetchPictures(): Observable<NasaPicturesEventResult> {
+        return repository.fetchImages()
+            .subscribeOn(rxSchedulers.io())
+            .observeOn(rxSchedulers.main())
+            .map<NasaPicturesEventResult> { FetchPicturesResult(it) }
+            .onErrorReturn { ErrorResult(it) }
+            .startWith(InProgressResult)
     }
 
     private fun Observable<ImageClickEvent>.onImageClickResult(): Observable<ImageClickResult> {
@@ -78,7 +89,7 @@ class NasaPicturesViewModel(
     private fun Observable<NasaPicturesEventResult>.resultToViewState(): Observable<NasaPicturesViewState> {
         return scan(NasaPicturesViewState()) { vs, lceResult ->
             when (lceResult) {
-                is ScreenLoadResult -> {
+                is FetchPicturesResult -> {
                     val gridItems = lceResult
                         .imageResponses
                         .mapTo(mutableListOf()) {
