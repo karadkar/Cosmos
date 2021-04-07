@@ -13,7 +13,7 @@ import io.github.karadkar.sample.databinding.ActivityPictureDetailBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class PictureDetailActivity : AppCompatActivity() {
+class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private lateinit var binding: ActivityPictureDetailBinding
@@ -42,6 +42,7 @@ class PictureDetailActivity : AppCompatActivity() {
         bottomSheet = BottomSheetBehavior.from(binding.cvDetails)
         bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheet.addBottomSheetCallback(bottomSheetCallbacks)
+        binding.bottomSheetHead.setOnClickListener(this)
 
         binding.vpPictures.addOnPageChangeListener(picturePageChangeListener)
         val defaultPagePosition = viewModel.getDefaultPagePosition(defaultImageId)
@@ -85,6 +86,18 @@ class PictureDetailActivity : AppCompatActivity() {
         }
 
         override fun onPageScrollStateChanged(state: Int) {}
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.bottom_sheet_head -> {
+                if (bottomSheet.state == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+                } else if (bottomSheet.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                    bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+        }
     }
 
     private fun update(detail: PictureDetail) {

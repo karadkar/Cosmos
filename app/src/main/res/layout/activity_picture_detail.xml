@@ -43,12 +43,13 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bottom_sheet_head"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/picture_detail_bottom_sheet_peek_height"
                 android:animateLayoutChanges="true"
                 android:padding="16dp">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/ib_expand_collapse"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
