@@ -15,6 +15,8 @@ class PictureDetailViewModel(
                 id = value.id,
                 imageUrl = value.imageUrlHd,
                 title = value.title,
+                author = value.copyright,
+                date = value.date!!,
                 description = value.explanation
             )
             imageIds.add(value.id)
@@ -25,4 +27,5 @@ class PictureDetailViewModel(
     fun getPictureDetail(indexPosition: Int): PictureDetail = pictureDetails[imageIds[indexPosition]]!!
     fun getTotalCount(): Int = pictureDetails.size
     fun getTotalImageIds(): List<String> = imageIds
+    fun getDefaultPagePosition(defaultImageId: String): Int = imageIds.indexOf(defaultImageId)
 }

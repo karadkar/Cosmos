@@ -1,6 +1,5 @@
 package io.github.karadkar.sample.gridui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -80,7 +79,7 @@ class NasaPicturesActivity : AppCompatActivity() {
         when (effect) {
             is NasaPicturesViewEffect.OpenImageDetailScreenEffect -> {
                 startActivity(
-                    Intent(this, PictureDetailActivity::class.java)
+                    PictureDetailActivity.createIntent(this, effect.imageId)
                 )
             }
         }
