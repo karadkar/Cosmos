@@ -54,7 +54,7 @@ class PictureDetailActivity : AppCompatActivity() {
 
     private val bottomSheetCallbacks = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onStateChanged(bottomSheet: View, newState: Int) {
-
+            binding.ibExpandCollapse.rotation = if (newState == BottomSheetBehavior.STATE_EXPANDED) 180f else 0f
         }
 
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
