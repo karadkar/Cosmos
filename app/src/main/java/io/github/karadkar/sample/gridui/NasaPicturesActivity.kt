@@ -1,6 +1,7 @@
 package io.github.karadkar.sample.gridui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import io.github.karadkar.sample.R
@@ -81,6 +82,9 @@ class NasaPicturesActivity : AppCompatActivity() {
                 startActivity(
                     PictureDetailActivity.createIntent(this, effect.imageId)
                 )
+            }
+            is NasaPicturesViewEffect.ShowToastScreenEffect -> {
+                Toast.makeText(this, effect.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

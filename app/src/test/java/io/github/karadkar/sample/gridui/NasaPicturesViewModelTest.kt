@@ -2,6 +2,7 @@ package io.github.karadkar.sample.gridui
 
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.gridui.NasaPicturesViewEffect.OpenImageDetailScreenEffect
+import io.github.karadkar.sample.gridui.NasaPicturesViewEffect.ShowToastScreenEffect
 import io.github.karadkar.sample.gridui.NasaPicturesViewEvent.ImageClickEvent
 import io.github.karadkar.sample.gridui.NasaPicturesViewEvent.ScreenLoadEvent
 import io.github.karadkar.sample.utils.TestAppRxSchedulersProvider
@@ -69,7 +70,16 @@ class NasaPicturesViewModelTest {
 
         viewModel.submitEvent(ScreenLoadEvent)
         viewStateTester.apply {
-            assertValueAt(2, NasaPicturesViewState(errorMessage = "Oops! Something went wrong"))
+            assertNoErrors()
+            assertValueCount(3)
+            // progress should be disabled in the end
+            assertValueAt(2, NasaPicturesViewState(showProgressBar = false))
+        }
+
+        viewEffectTester.apply {
+            assertNoErrors()
+            assertValueCount(1)
+            assertValueAt(0, ShowToastScreenEffect("Oops! Something went wrong!"))
         }
     }
 

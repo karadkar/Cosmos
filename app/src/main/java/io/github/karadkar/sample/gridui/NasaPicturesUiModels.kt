@@ -11,8 +11,7 @@ data class NasaPictureGridItem(
 
 data class NasaPicturesViewState(
     val gridItems: List<NasaPictureGridItem> = emptyList(),
-    val showProgressBar: Boolean = false,
-    val errorMessage: String? = null
+    val showProgressBar: Boolean = false
 ) {
     fun showBlankSlate(): Boolean = gridItems.isEmpty()
 }

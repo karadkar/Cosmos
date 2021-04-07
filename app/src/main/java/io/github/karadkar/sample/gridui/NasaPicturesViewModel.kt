@@ -6,6 +6,7 @@ import io.github.karadkar.sample.gridui.NasaPicturesEventResult.*
 import io.github.karadkar.sample.gridui.NasaPicturesViewEffect.*
 import io.github.karadkar.sample.gridui.NasaPicturesViewEvent.*
 import io.github.karadkar.sample.utils.AppRxSchedulers
+import io.github.karadkar.sample.utils.logError
 import io.github.karadkar.sample.utils.logInfo
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -85,33 +86,24 @@ class NasaPicturesViewModel(
                         }
                     vs.copy(
                         showProgressBar = false,
-                        errorMessage = null,
                         gridItems = gridItems
                     )
                 }
-                is ErrorResult -> {
-                    vs.copy(
-                        showProgressBar = false,
-                        errorMessage = "Oops! Something went wrong"
-                    )
-                }
-                is InProgressResult -> {
-                    vs.copy(
-                        showProgressBar = true,
-                        errorMessage = null
-                    )
-                }
+                is InProgressResult -> vs.copy(showProgressBar = true)
+                is ErrorResult -> vs.copy(showProgressBar = false)
                 else -> vs.copy()
             }
         }.distinctUntilChanged()
     }
 
     private fun Observable<NasaPicturesEventResult>.resultToViewEffect(): Observable<NasaPicturesViewEffect> {
-        return filter { it is ImageClickResult }
+        return filter { it is ImageClickResult || it is ErrorResult }
             .map<NasaPicturesViewEffect> { eventResult ->
                 when (eventResult) {
-                    is ImageClickResult -> {
-                        OpenImageDetailScreenEffect(eventResult.imageId)
+                    is ImageClickResult -> OpenImageDetailScreenEffect(eventResult.imageId)
+                    is ErrorResult -> {
+                        logError("something went wrong", eventResult.throwable)
+                        ShowToastScreenEffect("Oops! Something went wrong!")
                     }
                     else -> error("unknown result $eventResult for view-effect")
                 }
