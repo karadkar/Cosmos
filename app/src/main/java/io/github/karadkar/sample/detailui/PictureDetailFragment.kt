@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import io.github.karadkar.sample.R
 import io.github.karadkar.sample.databinding.FragmentPictureBinding
 import io.github.karadkar.sample.utils.gone
-import io.github.karadkar.sample.utils.logError
 import io.github.karadkar.sample.utils.visible
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class PictureDetailFragment : Fragment() {
+class PictureDetailFragment : Fragment(), Callback {
     private lateinit var binding: FragmentPictureBinding
     private lateinit var imageId: String
     private val viewModel: PictureDetailViewModel by sharedViewModel()
@@ -26,18 +27,26 @@ class PictureDetailFragment : Fragment() {
         binding.progressBar.visible()
         Picasso.get()
             .load(pictureDetails.imageUrl)
-            .into(binding.tivPicture, object : Callback {
-                override fun onSuccess() {
-                    binding.progressBar.gone()
-                }
-
-                override fun onError(e: Exception?) {
-                    binding.progressBar.gone()
-                    logError("error loading image", e)
-                }
-            })
+            .error(R.drawable.ic_broken_image)
+            .into(binding.tivPicture, this)
 
         return binding.root
+    }
+
+    override fun onSuccess() {
+        binding.apply {
+            progressBar.gone()
+            tivPicture.scaleType = ImageView.ScaleType.FIT_CENTER
+            tivPicture.isZoomEnabled = true
+        }
+    }
+
+    override fun onError(e: Exception?) {
+        binding.apply {
+            progressBar.gone()
+            tivPicture.scaleType = ImageView.ScaleType.CENTER
+            tivPicture.isZoomEnabled = false
+        }
     }
 
     companion object {

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/nasa_image_in_grid_item"
-            android:scaleType="centerCrop"
+            tools:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,9 +28,12 @@
             tools:src="@tools:sample/avatars" />
 
         <View
+            android:id="@+id/view_overlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/image_overlay_gradient"
+            tools:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
