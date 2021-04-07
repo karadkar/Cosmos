@@ -19,6 +19,7 @@ data class NasaPicturesViewState(
 
 sealed class NasaPicturesViewEffect {
     data class OpenImageDetailScreenEffect(val imageId: String) : NasaPicturesViewEffect()
+    data class ShowToastScreenEffect(val message: String) : NasaPicturesViewEffect()
 }
 
 sealed class NasaPicturesViewEvent {
@@ -29,4 +30,6 @@ sealed class NasaPicturesViewEvent {
 sealed class NasaPicturesEventResult {
     data class ScreenLoadResult(val imageResponses: List<NasaImageResponse>) : NasaPicturesEventResult()
     data class ImageClickResult(val imageId: String) : NasaPicturesEventResult()
+    object InProgressResult : NasaPicturesEventResult()
+    data class ErrorResult(val throwable: Throwable?) : NasaPicturesEventResult()
 }

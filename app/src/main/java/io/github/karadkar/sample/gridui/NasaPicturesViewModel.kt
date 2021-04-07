@@ -6,7 +6,6 @@ import io.github.karadkar.sample.gridui.NasaPicturesEventResult.*
 import io.github.karadkar.sample.gridui.NasaPicturesViewEffect.*
 import io.github.karadkar.sample.gridui.NasaPicturesViewEvent.*
 import io.github.karadkar.sample.utils.AppRxSchedulers
-import io.github.karadkar.sample.utils.Lce
 import io.github.karadkar.sample.utils.logInfo
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -51,7 +50,7 @@ class NasaPicturesViewModel(
         eventEmitter.onNext(event)
     }
 
-    private fun Observable<NasaPicturesViewEvent>.eventToResult(): Observable<Lce<out NasaPicturesEventResult>> {
+    private fun Observable<NasaPicturesViewEvent>.eventToResult(): Observable<NasaPicturesEventResult> {
         return publish { o ->
             Observable.merge(
                 o.ofType(ScreenLoadEvent::class.java).onScreenLoadResult(),
@@ -60,61 +59,55 @@ class NasaPicturesViewModel(
         }
     }
 
-    private fun Observable<ScreenLoadEvent>.onScreenLoadResult(): Observable<out Lce<ScreenLoadResult>> {
+    private fun Observable<ScreenLoadEvent>.onScreenLoadResult(): Observable<out NasaPicturesEventResult> {
         return this.switchMap {
             return@switchMap repository.fetchImages()
                 .subscribeOn(rxSchedulers.io())
                 .observeOn(rxSchedulers.main())
-                .map<Lce<ScreenLoadResult>> { Lce.Content(ScreenLoadResult(it)) }
-                .onErrorReturn { Lce.Error(it) }
-                .startWith(Lce.Loading())
+                .map<NasaPicturesEventResult> { ScreenLoadResult(it) }
+                .onErrorReturn { ErrorResult(it) }
+                .startWith(InProgressResult)
         }
     }
 
-    private fun Observable<ImageClickEvent>.onImageClickResult(): Observable<Lce<ImageClickResult>> {
-        return map { Lce.Content(ImageClickResult(it.imageId)) }
+    private fun Observable<ImageClickEvent>.onImageClickResult(): Observable<ImageClickResult> {
+        return map { ImageClickResult(it.imageId) }
     }
 
-    private fun Observable<Lce<out NasaPicturesEventResult>>.resultToViewState(): Observable<NasaPicturesViewState> {
+    private fun Observable<NasaPicturesEventResult>.resultToViewState(): Observable<NasaPicturesViewState> {
         return scan(NasaPicturesViewState()) { vs, lceResult ->
             when (lceResult) {
-                is Lce.Content -> {
-                    when (lceResult.content) {
-                        is ScreenLoadResult -> {
-                            val gridItems = lceResult.content
-                                .imageResponses
-                                .mapTo(mutableListOf()) {
-                                    NasaPictureGridItem(id = it.id, title = it.title, imageUrl = it.imageUrlSd)
-                                }
-                            vs.copy(
-                                showProgressBar = false,
-                                errorMessage = null,
-                                gridItems = gridItems
-                            )
+                is ScreenLoadResult -> {
+                    val gridItems = lceResult
+                        .imageResponses
+                        .mapTo(mutableListOf()) {
+                            NasaPictureGridItem(id = it.id, title = it.title, imageUrl = it.imageUrlSd)
                         }
-                        else -> vs.copy()
-                    }
-
+                    vs.copy(
+                        showProgressBar = false,
+                        errorMessage = null,
+                        gridItems = gridItems
+                    )
                 }
-                is Lce.Error -> {
+                is ErrorResult -> {
                     vs.copy(
                         showProgressBar = false,
                         errorMessage = "Oops! Something went wrong"
                     )
                 }
-                is Lce.Loading -> {
+                is InProgressResult -> {
                     vs.copy(
                         showProgressBar = true,
                         errorMessage = null
                     )
                 }
+                else -> vs.copy()
             }
         }.distinctUntilChanged()
     }
 
-    private fun Observable<Lce<out NasaPicturesEventResult>>.resultToViewEffect(): Observable<NasaPicturesViewEffect> {
-        return filter { it is Lce.Content && it.content is ImageClickResult }
-            .map { (it as Lce.Content).content }
+    private fun Observable<NasaPicturesEventResult>.resultToViewEffect(): Observable<NasaPicturesViewEffect> {
+        return filter { it is ImageClickResult }
             .map<NasaPicturesViewEffect> { eventResult ->
                 when (eventResult) {
                     is ImageClickResult -> {
