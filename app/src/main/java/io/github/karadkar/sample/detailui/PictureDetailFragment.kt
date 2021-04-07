@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import io.github.karadkar.sample.databinding.FragmentPictureBinding
 import io.github.karadkar.sample.utils.gone
+import io.github.karadkar.sample.utils.logError
 import io.github.karadkar.sample.utils.visible
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -33,7 +33,7 @@ class PictureDetailFragment : Fragment() {
 
                 override fun onError(e: Exception?) {
                     binding.progressBar.gone()
-                    Toast.makeText(this@PictureDetailFragment.context, "error loading image", Toast.LENGTH_SHORT).show()
+                    logError("error loading image", e)
                 }
             })
 
