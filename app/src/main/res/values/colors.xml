@@ -18,9 +18,15 @@
     <!--Color surface (light), color on error (light), -->
     <!--color on surface (dark), color on surface (dark)-->
     <color name="white_50">#ffffff</color>
+    <color name="grey_a20">#33ffffff</color>
 
     <color name="black_800">#121212</color> <!--Color surface (dark)-->
     <!--Color on secondary (light), color on background (light),-->
     <!--color on surface (light)-->
     <color name="black_900">#000000</color>
+
+    <color name="grey_200">#C1C1C1</color>
+    <color name="blue_grey">#95989D</color>
+    <color name="blue_dark_grainy">#23272F</color>
+    <color name="blue_dark_900">#1A1D23</color>
 </resources>

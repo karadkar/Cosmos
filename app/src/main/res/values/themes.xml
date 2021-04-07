@@ -4,8 +4,8 @@
     <!--top level dayNight theme used by manifest -->
     <style name="AppTheme" parent="BaseAppTheme" />
 
-    <!--Base custom theme which will be shared between both light and dark theme variants-->
-    <style name="BaseAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!--Base custom theme which can be shared between both light and dark theme variants-->
+    <style name="BaseAppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!--Material color attributes (light theme) -->
         <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
         <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
@@ -14,13 +14,15 @@
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorSecondary">@color/green_200</item>
         <item name="colorSecondaryVariant">@color/green_500</item>
+
         <!--colorBackground appears behind scrollable content and is used for the default window-->
         <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
         <!--and menus. colorError is used to indicate an error state for components such as-->
         <!--text fields.-->
-        <item name="android:colorBackground">@color/white_50</item>
-        <item name="colorSurface">@color/white_50</item>
+        <item name="android:colorBackground">@color/blue_dark_grainy</item>
+        <item name="colorSurface">@color/blue_dark_900</item>
         <item name="colorError">@color/red_600</item>
+
         <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
         <!--on which they appear.-->
         <item name="colorOnPrimary">@color/white_50</item>
@@ -28,5 +30,8 @@
         <item name="colorOnBackground">@color/black_900</item>
         <item name="colorOnSurface">@color/black_900</item>
         <item name="colorOnError">@color/white_50</item>
+
+        <!--ripple color-->
+        <item name="colorControlHighlight">@color/grey_a20</item>
     </style>
 </resources>
