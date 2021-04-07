@@ -22,6 +22,11 @@ class PictureDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPictureDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowTitleEnabled(false)
+        }
 
         binding.vpPictures.adapter = PicturesAdapter(
             supportFragmentManager,
@@ -32,6 +37,19 @@ class PictureDetailActivity : AppCompatActivity() {
         bottomSheet.addBottomSheetCallback(bottomSheetCallbacks)
 
         binding.vpPictures.addOnPageChangeListener(picturePageChangeListener)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
+    override fun onBackPressed() {
+        if (bottomSheet.state == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+        } else {
+            super.onBackPressed()
+        }
     }
 
     private val bottomSheetCallbacks = object : BottomSheetBehavior.BottomSheetCallback() {
