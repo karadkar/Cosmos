@@ -67,12 +67,17 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
         if (binding.vpPictures.currentItem != state.currentPageIndex) {
             binding.vpPictures.currentItem = state.currentPageIndex
         }
+        binding.apply {
+            if (ibExpandCollapse.rotation != state.bottomSheetIndicatorRotation) {
+                ibExpandCollapse.rotation = state.bottomSheetIndicatorRotation
+            }
+        }
     }
 
     private fun updateBottomSheet(detail: PictureDetail) {
-        if (bottomSheet.state != BottomSheetBehavior.STATE_COLLAPSED) {
-            bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
+//        if (bottomSheet.state != BottomSheetBehavior.STATE_COLLAPSED) {
+//            bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+//        }
         // TODO: add fade in animation for tile
         val authorDetails = if (detail.author.isNotEmpty()) {
             authorDetailStringFormat.format(detail.author, detail.getFormattedDateString())
@@ -107,11 +112,19 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
 
     private val bottomSheetCallbacks = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onStateChanged(bottomSheet: View, newState: Int) {
-            binding.ibExpandCollapse.rotation = if (newState == BottomSheetBehavior.STATE_EXPANDED) 180f else 0f
+            viewModel.submitEvent(PictureDetailViewEvent.BottomSheetStateChanged(newState.toBottomSheetState()))
         }
 
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
 
+        }
+    }
+
+    private fun Int.toBottomSheetState(): BottomSheetState {
+        return when (this) {
+            BottomSheetBehavior.STATE_COLLAPSED -> BottomSheetState.Collapsed
+            BottomSheetBehavior.STATE_EXPANDED -> BottomSheetState.Expanded
+            else -> BottomSheetState.Other
         }
     }
 

@@ -2,10 +2,8 @@ package io.github.karadkar.sample.detailui
 
 import androidx.lifecycle.ViewModel
 import io.github.karadkar.sample.data.NasaImageRepository
-import io.github.karadkar.sample.detailui.PictureDetailEventResult.PageSelectedResult
-import io.github.karadkar.sample.detailui.PictureDetailEventResult.ScreenLoadResult
-import io.github.karadkar.sample.detailui.PictureDetailViewEvent.PageSelectedEvent
-import io.github.karadkar.sample.detailui.PictureDetailViewEvent.ScreenLoadEvent
+import io.github.karadkar.sample.detailui.PictureDetailEventResult.*
+import io.github.karadkar.sample.detailui.PictureDetailViewEvent.*
 import io.github.karadkar.sample.utils.logInfo
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -48,6 +46,7 @@ class PictureDetailViewModel(
             Observable.merge(
                 o.ofType(ScreenLoadEvent::class.java).onScreenLoadResult(),
                 o.ofType(PageSelectedEvent::class.java).onPageSelectedResult(),
+                o.ofType(BottomSheetStateChanged::class.java).onBottomSheetStateChangedResult(),
             )
         }
     }
@@ -76,6 +75,13 @@ class PictureDetailViewModel(
         return map { PageSelectedResult(it.index) }
     }
 
+    private fun Observable<BottomSheetStateChanged>.onBottomSheetStateChangedResult(): Observable<out RotateBottomSheetIndicatorResult> {
+        return map {
+            val rotation = if (it.state == BottomSheetState.Expanded) 180f else 0f
+            return@map RotateBottomSheetIndicatorResult(rotation)
+        }
+    }
+
     private fun Observable<out PictureDetailEventResult>.resultToViewState(): Observable<PictureDetailViewState> {
         return scan(PictureDetailViewState()) { vs, result ->
             when (result) {
@@ -93,6 +99,8 @@ class PictureDetailViewModel(
                         currentPageIndex = result.index
                     )
                 }
+                is RotateBottomSheetIndicatorResult -> vs.copy(bottomSheetIndicatorRotation = result.rotation)
+                else -> vs
             }
         }.filter { it.currentPageDetail != null }
             .distinctUntilChanged()

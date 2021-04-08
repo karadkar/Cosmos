@@ -21,11 +21,13 @@ data class PictureDetail(
 sealed class BottomSheetState {
     object Collapsed : BottomSheetState()
     object Expanded : BottomSheetState()
+    object Other : BottomSheetState()
 }
 
 sealed class PictureDetailViewEvent {
     data class ScreenLoadEvent(val defaultImageId: String) : PictureDetailViewEvent()
     data class PageSelectedEvent(val index: Int) : PictureDetailViewEvent()
+    data class BottomSheetStateChanged(val state: BottomSheetState) : PictureDetailViewEvent()
 }
 
 sealed class PictureDetailEventResult {
@@ -37,13 +39,15 @@ sealed class PictureDetailEventResult {
     ) : PictureDetailEventResult()
 
     data class PageSelectedResult(val index: Int) : PictureDetailEventResult()
+    data class RotateBottomSheetIndicatorResult(val rotation: Float) : PictureDetailEventResult()
 }
 
 data class PictureDetailViewState(
     val imageIds: List<String> = emptyList(),
     val pictureDetails: List<PictureDetail> = emptyList(),
     val currentPageDetail: PictureDetail? = null,
-    val currentPageIndex: Int = 0
+    val currentPageIndex: Int = 0,
+    val bottomSheetIndicatorRotation: Float = 0f
 )
 
 fun NasaImageResponse.toPictureDetail(): PictureDetail {
