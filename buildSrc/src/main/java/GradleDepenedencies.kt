@@ -31,6 +31,7 @@ object Libraries {
     const val picasso = "com.squareup.picasso:picasso:2.71828"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
     const val touchImageView = "com.github.MikeOrtiz:TouchImageView:3.0.5"
+    const val viewPager2 = "androidx.viewpager2:viewpager2:1.0.0"
 
     const val rxJava2 = "io.reactivex.rxjava2:rxjava:2.2.10"
     const val rxAndroid2 = "io.reactivex.rxjava2:rxandroid:2.1.1"

@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
 import io.github.karadkar.sample.R
@@ -26,6 +26,7 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var defaultImageId: String
     private lateinit var authorDetailStringFormat: String
     private val disposable = CompositeDisposable()
+    private lateinit var adapter: PictureDetailAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +44,9 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
         bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheet.addBottomSheetCallback(bottomSheetCallbacks)
         binding.bottomSheetHead.setOnClickListener(this)
-
-        binding.vpPictures.addOnPageChangeListener(picturePageChangeListener)
-
+        binding.vpPictures.registerOnPageChangeCallback(picturePageChangeListener)
+        adapter = PictureDetailAdapter(this)
+        binding.vpPictures.adapter = adapter
 
         viewModel.viewState
             .subscribe({
@@ -61,13 +62,7 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
         val currentDetail = state.currentPageDetail!!
         updateBottomSheet(currentDetail)
 
-        if (binding.vpPictures.adapter == null) {
-            binding.vpPictures.adapter = PicturesAdapter(
-                supportFragmentManager,
-                imageIds = state.imageIds
-            )
-        }
-
+        adapter.submitList(state.pictureDetails)
         // needs update
         if (binding.vpPictures.currentItem != state.currentPageIndex) {
             binding.vpPictures.currentItem = state.currentPageIndex
@@ -120,16 +115,13 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private val picturePageChangeListener = object : ViewPager.OnPageChangeListener {
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
+    private val picturePageChangeListener = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
             viewModel.submitEvent(
                 PictureDetailViewEvent.PageSelectedEvent(position)
             )
         }
-
-        override fun onPageScrollStateChanged(state: Int) {}
     }
 
     override fun onClick(v: View?) {

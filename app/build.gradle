@@ -41,6 +41,7 @@ dependencies {
     implementation Libraries.swipeRefreashLayout
     implementation Libraries.picasso
     implementation Libraries.touchImageView
+    implementation Libraries.viewPager2
 
     testImplementation Libraries.junit
     testImplementation Libraries.truthAssersions
