@@ -9,6 +9,10 @@ object TestDataProvider {
 
     init {
         nasaImagesJsonData = ResourceFileReader("nasa_images.json").content
-        nasaImageResponseList = ObjectMapper().configureCommon().readValue(nasaImagesJsonData)
+        val result: List<NasaImageResponse> = ObjectMapper().configureCommon().readValue(nasaImagesJsonData)
+        nasaImageResponseList = result.sortedByDescending { it.date }
+        nasaImageResponseList.forEachIndexed { index, response ->
+            response.id = "id-$index"
+        }
     }
 }

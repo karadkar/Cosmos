@@ -10,6 +10,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
 import io.github.karadkar.sample.R
 import io.github.karadkar.sample.databinding.ActivityPictureDetailBinding
+import io.github.karadkar.sample.utils.addTo
+import io.github.karadkar.sample.utils.logError
+import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -22,6 +25,7 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var bottomSheet: BottomSheetBehavior<MaterialCardView>
     private lateinit var defaultImageId: String
     private lateinit var authorDetailStringFormat: String
+    private val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,24 +39,62 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
             setDisplayShowTitleEnabled(false)
         }
 
-        binding.vpPictures.adapter = PicturesAdapter(
-            supportFragmentManager,
-            imageIds = viewModel.getTotalImageIds()
-        )
         bottomSheet = BottomSheetBehavior.from(binding.cvDetails)
         bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheet.addBottomSheetCallback(bottomSheetCallbacks)
         binding.bottomSheetHead.setOnClickListener(this)
 
         binding.vpPictures.addOnPageChangeListener(picturePageChangeListener)
-        val defaultPagePosition = viewModel.getDefaultPagePosition(defaultImageId)
-        binding.vpPictures.currentItem = defaultPagePosition
 
-        if (defaultPagePosition == 0) {
-            // in view-pager 0th page is default selected and It doesn't call onPageSelected callback
-            // so updating manually
-            update(viewModel.getPictureDetail(0))
+
+        viewModel.viewState
+            .subscribe({
+                renderViewState(it)
+            }, {
+                logError("error observing view-state", it)
+            }).addTo(disposable)
+
+        viewModel.submitEvent(PictureDetailViewEvent.ScreenLoadEvent(defaultImageId))
+    }
+
+    private fun renderViewState(state: PictureDetailViewState) {
+        val currentDetail = state.currentPageDetail!!
+        updateBottomSheet(currentDetail)
+
+        if (binding.vpPictures.adapter == null) {
+            binding.vpPictures.adapter = PicturesAdapter(
+                supportFragmentManager,
+                imageIds = state.imageIds
+            )
         }
+
+        // needs update
+        if (binding.vpPictures.currentItem != state.currentPageIndex) {
+            binding.vpPictures.currentItem = state.currentPageIndex
+        }
+    }
+
+    private fun updateBottomSheet(detail: PictureDetail) {
+        if (bottomSheet.state != BottomSheetBehavior.STATE_COLLAPSED) {
+            bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        // TODO: add fade in animation for tile
+        val authorDetails = if (detail.author.isNotEmpty()) {
+            authorDetailStringFormat.format(detail.author, detail.getFormattedDateString())
+        } else {
+            detail.getFormattedDateString()
+        }
+
+        binding.apply {
+            tvPictureDetailTitle.text = detail.title
+            tvPictureDetailAuther.text = authorDetails
+            tvPictureDetailDescription.text = detail.description
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.clear()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -82,7 +124,9 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
         override fun onPageSelected(position: Int) {
-            update(viewModel.getPictureDetail(position))
+            viewModel.submitEvent(
+                PictureDetailViewEvent.PageSelectedEvent(position)
+            )
         }
 
         override fun onPageScrollStateChanged(state: Int) {}
@@ -97,24 +141,6 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
                     bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }
-        }
-    }
-
-    private fun update(detail: PictureDetail) {
-        if (bottomSheet.state != BottomSheetBehavior.STATE_COLLAPSED) {
-            bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-        // TODO: add fade in animation for tile
-        val authorDetails = if (detail.author.isNotEmpty()) {
-            authorDetailStringFormat.format(detail.author, detail.getFormattedDateString())
-        } else {
-            detail.getFormattedDateString()
-        }
-
-        binding.apply {
-            tvPictureDetailTitle.text = detail.title
-            tvPictureDetailAuther.text = authorDetails
-            tvPictureDetailDescription.text = detail.description
         }
     }
 
