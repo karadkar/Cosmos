@@ -50,6 +50,14 @@ dependencies {
     testImplementation Libraries.mockWebServer
     testImplementation Libraries.koinTest
 
+    androidTestImplementation Libraries.koinTest
+    androidTestImplementation Libraries.testExt
+    androidTestImplementation Libraries.mockkAndroid
+    androidTestImplementation(Libraries.barista){
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    androidTestImplementation Libraries.okHttp3IdlingResource
+    androidTestImplementation Libraries.rxJava2IdlingResource
     androidTestImplementation Libraries.testRunner
     androidTestImplementation Libraries.espressoCore
     androidTestImplementation Libraries.truthAssersions

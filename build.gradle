@@ -20,6 +20,12 @@ allprojects {
         jcenter()
         maven { url "https://www.jitpack.io" } // just for TouchImageView
     }
+    configurations.all {
+        resolutionStrategy {
+            // to fix mockk androidTest issue https://github.com/mockk/mockk/issues/281#issuecomment-483329039
+            force("org.objenesis:objenesis:2.6")
+        }
+    }
 }
 
 task clean(type: Delete) {

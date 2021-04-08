@@ -49,11 +49,16 @@ object Libraries {
     //region Testing dependencies
     const val junit = "junit:junit:4.12"
     const val testRunner = "androidx.test:runner:1.2.0"
+    const val testExt = "androidx.test.ext:junit:1.1.0"
     const val espressoCore = "androidx.test.espresso:espresso-core:3.2.0"
     const val truthAssersions = "com.google.truth:truth:0.42" // assertions
     const val mockk = "io.mockk:mockk:1.9.3"
+    const val mockkAndroid = "io.mockk:mockk-android:1.9.3"
     const val mockWebServer = "com.squareup.okhttp3:mockwebserver:4.9.0"
     const val koinTest = "org.koin:koin-test:${Versions.koinVersion}"
+    const val barista = "com.schibsted.spain:barista:3.9.0"
+    const val okHttp3IdlingResource = "com.jakewharton.espresso:okhttp3-idling-resource:1.0.0"
+    const val rxJava2IdlingResource = "com.squareup.rx.idler:rx2-idler:0.9.1"
 
     // use same version as lifecycle to  avoid issue https://stackoverflow.com/q/55336613/2804351
     const val coreTesting = "androidx.arch.core:core-testing:${Versions.archExtensions}"
