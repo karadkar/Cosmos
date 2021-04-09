@@ -22,7 +22,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 
-val nasaPicturesAppKoinModules = module {
+val retrofitModule = module {
 
     single<ObjectMapper> {
         return@single ObjectMapper().also {
@@ -67,12 +67,16 @@ val nasaPicturesAppKoinModules = module {
         return@single builder.baseUrl(httpUrl).build()
     }
 
+}
 
+val apiServiceModule = module {
     single<NasaPicturesApiService> {
         val retrofit = get<Retrofit>(qualifier = named(ModuleNames.NASA_IMAGES))
         return@single retrofit.create(NasaPicturesApiService::class.java)
     }
+}
 
+val appModule = module {
     single<NasaImageRepository> {
         return@single NasaImageRepository(apiService = get())
     }
@@ -88,3 +92,10 @@ val nasaPicturesAppKoinModules = module {
         return@viewModel PictureDetailViewModel(repository = get())
     }
 }
+
+/**
+ * order is important as their dependencies.
+ * [appModule] repository needs api service
+ * [apiServiceModule] api service needs retrofit
+ */
+val nasaPicturesAppKoinModules = listOf(retrofitModule, apiServiceModule, appModule)

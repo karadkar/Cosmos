@@ -10,14 +10,14 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class NasaPicturesApp : Application() {
+open class NasaPicturesApp : Application() {
     override fun onCreate() {
         super.onCreate()
         setupKoin()
         setPicassoSingleton()
     }
 
-    private fun setupKoin() {
+    protected open fun setupKoin() {
         startKoin {
             androidLogger()
             androidContext(this@NasaPicturesApp)

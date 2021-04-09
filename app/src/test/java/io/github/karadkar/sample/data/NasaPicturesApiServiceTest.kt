@@ -28,13 +28,13 @@ class NasaPicturesApiServiceTest : KoinTest {
     fun setup() {
         mockWebServer = MockWebServer()
         startKoin {
-            val testModules = listOf(nasaPicturesAppKoinModules, module {
+            val testModules = module {
                 // override base url used for retrofit with mock-web-server
                 single<HttpUrl>(named(AppConstants.ModuleNames.NASA_IMAGES), override = true) {
                     return@single mockWebServer.url("/")
                 }
-            })
-            loadKoinModules(testModules)
+            }
+            loadKoinModules(nasaPicturesAppKoinModules + testModules)
         }
         mockWebServer.start()
     }
