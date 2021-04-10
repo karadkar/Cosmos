@@ -4,7 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.realm.Realm
 import io.realm.RealmModel
-import io.realm.RealmResults
+import io.realm.RealmQuery
 
 fun Realm.completableTransaction(
     transactionBlock: (realm: Realm) -> Unit
@@ -18,8 +18,8 @@ fun Realm.completableTransaction(
     }
 }
 
-fun <T : RealmModel> RealmResults<T>.findAsFlowableList(): Flowable<List<T>> {
-    return this.asFlowable()
+fun <T : RealmModel> RealmQuery<T>.findAsFlowableList(): Flowable<List<T>> {
+    return this.findAllAsync().asFlowable()
         .filter { it.isLoaded } // check if async query is completed
         .map { it } // maps to list
 }
