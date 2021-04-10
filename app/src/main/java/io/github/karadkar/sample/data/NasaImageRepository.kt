@@ -1,11 +1,12 @@
 package io.github.karadkar.sample.data
 
 import io.github.karadkar.sample.utils.logError
+import io.reactivex.Flowable
 import io.reactivex.Observable
 
 class NasaImageRepository(
     private val apiService: NasaPicturesApiService,
-    private val imageCache: LinkedHashMap<String, NasaImageResponse> = LinkedHashMap()
+    private val imageResponseDao: NasaImageResponseDao
 ) {
 
     fun fetchImages(): Observable<List<NasaImageResponse>> {
@@ -16,17 +17,21 @@ class NasaImageRepository(
             .map { responses ->
                 return@map responses
                     .filter { it.date != null }
-                    .sortedByDescending { it.date }
                     .also { _responses ->
                         _responses.forEachIndexed { index, nasaImageResponse ->
                             nasaImageResponse.id = "id-$index"
-                            imageCache[nasaImageResponse.id] = nasaImageResponse
                         }
                     }
+            }.flatMap { responses ->
+                return@flatMap imageResponseDao.saveImages(responses)
+                    .andThen(Observable.just(responses))
             }
     }
 
-    fun getImageResponse(imageId: String): NasaImageResponse? = imageCache[imageId]
+    fun getImageResponse(imageId: String): NasaImageResponse? = imageResponseDao.getImageResponse(imageId)
 
-    fun getImages(): Map<String, NasaImageResponse> = imageCache
+    fun getImages(): Map<String, NasaImageResponse> = emptyMap()
+
+    fun getFlowableImageResponseList(): Flowable<List<NasaImageResponse>> =
+        imageResponseDao.getFlowableImageResponseList()
 }

@@ -5,6 +5,9 @@ import io.github.karadkar.sample.utils.TestDataProvider
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import org.junit.After
 import org.junit.Before
@@ -12,15 +15,20 @@ import org.junit.Test
 
 class NasaImageRepositoryTest {
     private lateinit var mockApiService: NasaPicturesApiService
+    private lateinit var mockDao: NasaImageResponseDao
     private lateinit var repository: NasaImageRepository
-    private lateinit var imageCache: LinkedHashMap<String, NasaImageResponse>
     private val imageResponseList: List<NasaImageResponse> = TestDataProvider.nasaImageResponseList
 
     @Before
     fun setup() {
         mockApiService = mockk()
-        imageCache = LinkedHashMap()
-        repository = NasaImageRepository(apiService = mockApiService, imageCache = imageCache)
+        mockDao = mockk()
+        repository = NasaImageRepository(
+            apiService = mockApiService, imageResponseDao = mockDao
+        )
+        every {
+            mockDao.getFlowableImageResponseList()
+        } returns Flowable.just(imageResponseList)
     }
 
     @After
@@ -29,10 +37,12 @@ class NasaImageRepositoryTest {
     }
 
     @Test
-    fun `fetch images returns list in descending order of date and creates id from index`() {
+    fun `fetch images creates id from index`() {
         every {
             mockApiService.getImages()
         } returns Observable.just(imageResponseList.shuffled())
+
+        every { mockDao.saveImages(any()) } returns Completable.complete()
 
         val observer = repository.fetchImages().test()
         observer.assertComplete()
@@ -40,52 +50,52 @@ class NasaImageRepositoryTest {
 
         for (i in resultList.indices) {
             assertThat(resultList[i].id).isEqualTo("id-$i")
-
-            if (i == 0) continue
-            assertThat(resultList[i - 1].date).isGreaterThan(resultList[i].date)
         }
     }
 
     @Test
-    fun `getImageResponse should return null when images are not fetched before`() {
-        every { mockApiService.getImages() } returns Observable.just(imageResponseList)
-        val expectedId = imageResponseList.random().id
-        assertThat(repository.getImageResponse(expectedId)).isNull()
+    fun `getImageResponse returns data from dao`() {
+        every { mockDao.getImageResponse(any()) } returns null
 
-        repository.fetchImages().test().assertComplete()
-        assertThat(repository.getImageResponse(expectedId)).isNotNull()
+        val expectedResponse = imageResponseList.random()
+        assertThat(repository.getImageResponse(expectedResponse.id)).isNull()
+        verify(exactly = 1) { mockDao.getImageResponse(expectedResponse.id) }
+
+
+        every { mockDao.getImageResponse(expectedResponse.id) } returns expectedResponse
+        assertThat(repository.getImageResponse(expectedResponse.id)).isEqualTo(expectedResponse)
     }
 
     @Test
-    fun `fetchImages should cache all the result in hash-map`() {
+    fun `fetchImages should save all the result in dao`() {
         every { mockApiService.getImages() } returns Observable.just(imageResponseList)
+        every { mockDao.saveImages(imageResponseList) } returns Completable.complete()
+
         repository.fetchImages().test().assertComplete()
 
-        imageResponseList.forEach { expectedResponse ->
-            assertThat(imageCache[expectedResponse.id]).apply {
-                isNotNull()
-                isEqualTo(expectedResponse)
-            }
+        verify(exactly = 1) { mockDao.saveImages(imageResponseList) }
+    }
+
+    @Test
+    fun `when dao fails to store data fetchImages should also fail`() {
+        val error = Exception("invalid data")
+        every { mockApiService.getImages() } returns Observable.just(imageResponseList)
+        every { mockDao.saveImages(imageResponseList) } returns Completable.error(error)
+
+        repository.fetchImages().test().apply {
+            assertNotComplete()
+            assertNoValues()
+            assertError(error)
         }
+
+        verify(exactly = 1) { mockDao.saveImages(imageResponseList) }
     }
 
     @Test
-    fun `image-response cache should retain descending date sort order`() {
-        every { mockApiService.getImages() } returns Observable.just(imageResponseList)
-        repository.fetchImages().test().assertComplete()
-        val responses = imageCache.values.toList()
-        responses.forEachIndexed { index, response ->
-            if (index > 0) {
-                val previousResponse = responses[index - 1]
-                assertThat(previousResponse.date).isGreaterThan(response.date)
-            }
+    fun `getFlowableImageResponseList should return list from dao`() {
+        every { mockDao.getFlowableImageResponseList() } returns Flowable.just(imageResponseList)
+        repository.getFlowableImageResponseList().test().apply {
+            assertValueAt(0, imageResponseList)
         }
-    }
-
-    @Test
-    fun `getImages returns cached map`() {
-        every { mockApiService.getImages() } returns Observable.just(imageResponseList)
-        repository.fetchImages().test().assertComplete()
-        assertThat(repository.getImages()).isEqualTo(imageCache)
     }
 }
