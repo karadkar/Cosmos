@@ -16,7 +16,7 @@ class NasaImageDaoTest : KoinTest {
 
     private lateinit var dao: NasaImageResponseDao
     private lateinit var realm: Realm
-    private val testData = TestDataProvider.nasaImageResponseList
+    private val testData = TestDataProvider.nasaImageResponseList.shuffled()
 
     /**
      * See [TestApp] for default inMemory Realm configuration
@@ -56,7 +56,7 @@ class NasaImageDaoTest : KoinTest {
 
     @UiThreadTest
     @Test
-    fun getImage() {
+    fun getFlowableImageResponseList() {
 
         val resultTester = dao.getFlowableImageResponseList().test()
         resultTester.apply {
@@ -74,6 +74,25 @@ class NasaImageDaoTest : KoinTest {
             dao.saveImages(testData.take(5)).test().assertComplete()
             // verify we get 5 images as third result
             assertThat(values()[2].size).isEqualTo(5)
+
+            // verify result is in descending order of date
+            values()[2].forEachIndexed { index, value ->
+                if (index > 0) {
+                    val previousValue = values()[2][index - 1]
+                    assertThat(previousValue.date).isGreaterThan(value.date)
+                }
+            }
         }
+    }
+
+    @UiThreadTest
+    @Test
+    fun getImageResponse() {
+        val expectedValue = testData.random()
+        // should be null as no data yet saved
+        assertThat(dao.getImageResponse(expectedValue.id)).isNull()
+
+        dao.saveImages(testData).test().assertComplete()
+        assertThat(dao.getImageResponse(expectedValue.id)).isEqualTo(expectedValue)
     }
 }
