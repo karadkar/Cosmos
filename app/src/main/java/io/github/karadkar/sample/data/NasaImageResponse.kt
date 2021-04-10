@@ -3,11 +3,14 @@ package io.github.karadkar.sample.data
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSetter
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import java.util.*
 
-class NasaImageResponse {
+open class NasaImageResponse : RealmObject() {
 
     @JsonIgnore
+    @PrimaryKey
     var id: String = ""
 
     @JsonSetter("copyright")

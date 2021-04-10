@@ -4,6 +4,8 @@ import android.app.Application
 import com.squareup.picasso.LruCache
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -15,6 +17,7 @@ open class NasaPicturesApp : Application() {
         super.onCreate()
         setupKoin()
         setPicassoSingleton()
+        setupRealm()
     }
 
     protected open fun setupKoin() {
@@ -32,5 +35,16 @@ open class NasaPicturesApp : Application() {
             .memoryCache(LruCache(100 * 1024 * 1024))
             .build()
         Picasso.setSingletonInstance(picassoInstance)
+    }
+
+    protected open fun setupRealm() {
+        Realm.init(this)
+        Realm.setDefaultConfiguration(
+            RealmConfiguration.Builder()
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .name("nasa-picture.realm")
+                .build()
+        )
     }
 }

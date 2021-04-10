@@ -1,5 +1,7 @@
 package io.github.karadkar.sample
 
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -26,5 +28,17 @@ class TestApp : NasaPicturesApp() {
             androidContext(this@TestApp)
             modules(retrofitModule)// because we need OkHttp for Idling resource
         }
+    }
+
+    override fun setupRealm() {
+        Realm.init(this)
+        Realm.setDefaultConfiguration(
+            RealmConfiguration.Builder()
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .name("test-app.realm")
+                .inMemory()
+                .build()
+        )
     }
 }
