@@ -18,7 +18,7 @@ fun Realm.completableTransaction(
     }
 }
 
-fun <T : RealmModel> RealmQuery<T>.findAsFlowableList(): Flowable<List<T>> {
+fun <T : RealmModel> RealmQuery<T>.findAllAsFlowableList(): Flowable<List<T>> {
     return this.findAllAsync().asFlowable()
         .filter { it.isLoaded } // check if async query is completed
         .map { it } // maps to list

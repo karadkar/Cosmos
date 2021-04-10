@@ -13,21 +13,19 @@ import org.koin.test.KoinTest
 
 @RunWith(AndroidJUnit4::class)
 class NasaImageDaoTest : KoinTest {
-//
-//    private val okHttpClient by inject<OkHttpClient>()
-//
-//    @get:Rule
-//    val idlingResourceRule = IdlingResourceRule(okHttpClient)
 
-    private lateinit var dao: NasaImageDao
+    private lateinit var dao: NasaImageResponseDao
     private lateinit var realm: Realm
     private val testData = TestDataProvider.nasaImageResponseList
 
+    /**
+     * See [TestApp] for default inMemory Realm configuration
+     */
     @UiThreadTest
     @Before
     fun setUp() {
         realm = Realm.getDefaultInstance()
-        dao = NasaImageDao(realm)
+        dao = NasaImageResponseDao(realm)
     }
 
     @UiThreadTest
@@ -60,7 +58,7 @@ class NasaImageDaoTest : KoinTest {
     @Test
     fun getImage() {
 
-        val resultTester = dao.getImagesFlowable().test()
+        val resultTester = dao.getFlowableImageResponseList().test()
         resultTester.apply {
             assertNotComplete()
 

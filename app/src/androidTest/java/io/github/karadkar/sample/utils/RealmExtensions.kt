@@ -8,7 +8,8 @@ import io.realm.RealmQuery
 
 /**
  * Testing Realm Async Operations with Rx is not known at this time
- * so replacing original [completableTransaction] with non-async transaction
+ * so replacing [Realm.executeTransactionAsync] with [Realm.executeTransaction] for tests
+ * see [completableTransaction]
  */
 fun Realm.completableTransaction(
     transactionBlock: (realm: Realm) -> Unit
@@ -24,9 +25,10 @@ fun Realm.completableTransaction(
 }
 
 /**
- * replacing original [RealmQuery.findAllAsync] with [RealmQuery.findAll] for tests
+ * replacing [RealmQuery.findAllAsync] with [RealmQuery.findAll] for tests
+ * see [findAllAsFlowableList]
  */
-fun <T : RealmModel> RealmQuery<T>.findAsFlowableList(): Flowable<List<T>> {
+fun <T : RealmModel> RealmQuery<T>.findAllAsFlowableList(): Flowable<List<T>> {
     return this.findAll().asFlowable()
         .filter { it.isLoaded } // check if async query is completed
         .map { it } // maps to list
