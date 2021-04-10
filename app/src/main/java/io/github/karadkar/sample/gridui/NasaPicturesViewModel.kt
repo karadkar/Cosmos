@@ -62,8 +62,10 @@ class NasaPicturesViewModel(
     }
 
     private fun Observable<ScreenLoadEvent>.onScreenLoadResult(): Observable<out NasaPicturesEventResult> {
-        return this.switchMap {
-            return@switchMap fetchPictures()
+        return this.switchMap { event ->
+            val dbResult = repository.getFlowableImageResponseList().map { PicturesResult(it) }.toObservable()
+            val apiResult = fetchPictures()
+            return@switchMap Observable.merge(dbResult, apiResult)
         }
     }
 
@@ -75,9 +77,7 @@ class NasaPicturesViewModel(
 
     private fun fetchPictures(): Observable<NasaPicturesEventResult> {
         return repository.fetchImages()
-            .subscribeOn(rxSchedulers.io())
-            .observeOn(rxSchedulers.main())
-            .map<NasaPicturesEventResult> { FetchPicturesResult(it) }
+            .map<NasaPicturesEventResult> { FetchCompleteResult }
             .onErrorReturn { ErrorResult(it) }
             .startWith(InProgressResult)
     }
@@ -89,17 +89,14 @@ class NasaPicturesViewModel(
     private fun Observable<NasaPicturesEventResult>.resultToViewState(): Observable<NasaPicturesViewState> {
         return scan(NasaPicturesViewState()) { vs, lceResult ->
             when (lceResult) {
-                is FetchPicturesResult -> {
+                is PicturesResult -> {
                     val gridItems = lceResult
                         .imageResponses
-                        .mapTo(mutableListOf()) {
-                            NasaPictureGridItem(id = it.id, title = it.title, imageUrl = it.imageUrlSd)
-                        }
-                    vs.copy(
-                        showProgressBar = false,
-                        gridItems = gridItems
-                    )
+                        .mapTo(mutableListOf()) { it.mapToPictureGridItem() }
+
+                    vs.copy(gridItems = gridItems)
                 }
+                is FetchCompleteResult -> vs.copy(showProgressBar = false)
                 is InProgressResult -> vs.copy(showProgressBar = true)
                 is ErrorResult -> vs.copy(showProgressBar = false)
                 else -> vs.copy()

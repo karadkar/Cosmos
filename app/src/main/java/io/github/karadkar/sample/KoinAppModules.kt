@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.karadkar.sample.data.NasaImageRepository
+import io.github.karadkar.sample.data.NasaImageResponseDao
 import io.github.karadkar.sample.data.NasaPicturesApiService
 import io.github.karadkar.sample.detailui.PictureDetailViewModel
 import io.github.karadkar.sample.gridui.NasaPicturesViewModel
@@ -11,6 +12,7 @@ import io.github.karadkar.sample.utils.AppConstants
 import io.github.karadkar.sample.utils.AppConstants.ModuleNames
 import io.github.karadkar.sample.utils.AppRxSchedulers
 import io.github.karadkar.sample.utils.AppRxSchedulersProvider
+import io.realm.Realm
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -77,12 +79,18 @@ val apiServiceModule = module {
 }
 
 val appModule = module {
-    single<NasaImageRepository> {
-        return@single NasaImageRepository(apiService = get())
+    single<Realm> {
+        Realm.getDefaultInstance()
     }
+
+    single<NasaImageResponseDao> { NasaImageResponseDao(realm = get()) }
 
     single<AppRxSchedulers> {
         return@single AppRxSchedulersProvider()
+    }
+
+    single<NasaImageRepository> {
+        return@single NasaImageRepository(apiService = get(), imageResponseDao = get(), rxSchedulers = get())
     }
 
     viewModel {

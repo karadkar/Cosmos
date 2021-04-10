@@ -1,6 +1,7 @@
 package io.github.karadkar.sample.data
 
 import com.google.common.truth.Truth.assertThat
+import io.github.karadkar.sample.utils.TestAppRxSchedulersProvider
 import io.github.karadkar.sample.utils.TestDataProvider
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -24,7 +25,7 @@ class NasaImageRepositoryTest {
         mockApiService = mockk()
         mockDao = mockk()
         repository = NasaImageRepository(
-            apiService = mockApiService, imageResponseDao = mockDao
+            apiService = mockApiService, imageResponseDao = mockDao, rxSchedulers = TestAppRxSchedulersProvider()
         )
         every {
             mockDao.getFlowableImageResponseList()

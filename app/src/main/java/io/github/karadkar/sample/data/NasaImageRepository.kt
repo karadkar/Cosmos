@@ -1,12 +1,14 @@
 package io.github.karadkar.sample.data
 
+import io.github.karadkar.sample.utils.AppRxSchedulers
 import io.github.karadkar.sample.utils.logError
 import io.reactivex.Flowable
 import io.reactivex.Observable
 
 class NasaImageRepository(
     private val apiService: NasaPicturesApiService,
-    private val imageResponseDao: NasaImageResponseDao
+    private val imageResponseDao: NasaImageResponseDao,
+    private val rxSchedulers: AppRxSchedulers
 ) {
 
     fun fetchImages(): Observable<List<NasaImageResponse>> {
@@ -22,10 +24,13 @@ class NasaImageRepository(
                             nasaImageResponse.id = "id-$index"
                         }
                     }
-            }.flatMap { responses ->
+            }.subscribeOn(rxSchedulers.io())
+            .observeOn(rxSchedulers.main())
+            .flatMap { responses ->
                 return@flatMap imageResponseDao.saveImages(responses)
                     .andThen(Observable.just(responses))
             }
+        // TODO: verify dao saves on main thread
     }
 
     fun getImageResponse(imageId: String): NasaImageResponse? = imageResponseDao.getImageResponse(imageId)
