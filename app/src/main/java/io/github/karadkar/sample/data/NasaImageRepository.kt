@@ -35,8 +35,6 @@ class NasaImageRepository(
 
     fun getImageResponse(imageId: String): NasaImageResponse? = imageResponseDao.getImageResponse(imageId)
 
-    fun getImages(): Map<String, NasaImageResponse> = emptyMap()
-
     fun getFlowableImageResponseList(): Flowable<List<NasaImageResponse>> =
         imageResponseDao.getFlowableImageResponseList()
 }

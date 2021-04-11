@@ -52,22 +52,18 @@ class PictureDetailViewModel(
     }
 
     private fun Observable<ScreenLoadEvent>.onScreenLoadResult(): Observable<out PictureDetailEventResult> {
-        return map { result ->
-            val pictureDetails = mutableListOf<PictureDetail>()
-            val imageIds = mutableListOf<String>()
+        return switchMap { result ->
+            return@switchMap repository.getFlowableImageResponseList().map { imageResponses ->
 
-            repository.getImages().values.forEach { value ->
-                val pictureDetail = value.toPictureDetail()
-                pictureDetails.add(pictureDetail)
-                imageIds.add(value.id)
-            }
-            val currentIndex = pictureDetails.indexOfFirst { it.id == result.defaultImageId }
-            return@map ScreenLoadResult(
-                imageIds = imageIds,
-                pictureDetails = pictureDetails,
-                currentPageDetail = pictureDetails[currentIndex],
-                currentIndex = currentIndex
-            )
+                val pictureDetails = imageResponses.mapTo(mutableListOf()) { it.toPictureDetail() }
+                val currentIndex = pictureDetails.indexOfFirst { it.id == result.defaultImageId }
+
+                return@map ScreenLoadResult(
+                    pictureDetails = pictureDetails,
+                    currentPageDetail = pictureDetails[currentIndex],
+                    currentIndex = currentIndex
+                )
+            }.toObservable()
         }
     }
 
@@ -87,7 +83,6 @@ class PictureDetailViewModel(
             when (result) {
                 is ScreenLoadResult -> {
                     vs.copy(
-                        imageIds = result.imageIds,
                         pictureDetails = result.pictureDetails,
                         currentPageDetail = result.currentPageDetail,
                         currentPageIndex = result.currentIndex

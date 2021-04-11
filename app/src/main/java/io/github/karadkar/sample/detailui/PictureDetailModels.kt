@@ -32,7 +32,6 @@ sealed class PictureDetailViewEvent {
 
 sealed class PictureDetailEventResult {
     data class ScreenLoadResult(
-        val imageIds: List<String>,
         val pictureDetails: List<PictureDetail>,
         val currentPageDetail: PictureDetail,
         val currentIndex: Int
@@ -43,7 +42,6 @@ sealed class PictureDetailEventResult {
 }
 
 data class PictureDetailViewState(
-    val imageIds: List<String> = emptyList(),
     val pictureDetails: List<PictureDetail> = emptyList(),
     val currentPageDetail: PictureDetail? = null,
     val currentPageIndex: Int = 0,
