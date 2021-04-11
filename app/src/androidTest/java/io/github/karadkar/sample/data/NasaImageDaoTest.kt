@@ -5,6 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.github.karadkar.sample.utils.TestDataProvider
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -17,6 +18,12 @@ class NasaImageDaoTest : KoinTest {
     private lateinit var dao: NasaImageResponseDao
     private lateinit var realm: Realm
     private val testData = TestDataProvider.nasaImageResponseList.shuffled()
+    private val configuration = RealmConfiguration.Builder()
+        .schemaVersion(1)
+        .deleteRealmIfMigrationNeeded()
+        .name("test-app.realm")
+        .inMemory()
+        .build()
 
     /**
      * See [TestApp] for default inMemory Realm configuration
@@ -24,7 +31,7 @@ class NasaImageDaoTest : KoinTest {
     @UiThreadTest
     @Before
     fun setUp() {
-        realm = Realm.getDefaultInstance()
+        realm = Realm.getInstance(configuration)
         dao = NasaImageResponseDao(realm)
     }
 
