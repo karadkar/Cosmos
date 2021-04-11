@@ -15,9 +15,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.core.context.loadKoinModules
-import org.koin.core.context.unloadKoinModules
-import org.koin.core.module.Module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
@@ -35,17 +32,14 @@ class EndToEndTest : KoinTest {
     @get:Rule
     val activityRule = ActivityTestRule(NasaPicturesActivity::class.java, true, false)
 
-    // original modules. touches real api
-    private val apiAndAppModule: List<Module> = apiServiceModule + appModule
-
     @Before
     fun setup() {
-        loadKoinModules(apiAndAppModule)
+
     }
 
     @After
     fun tearDown() {
-        unloadKoinModules(apiAndAppModule)
+
     }
 
     @Test
