@@ -1,5 +1,6 @@
 package io.github.karadkar.sample.gridui
 
+import androidx.annotation.StringRes
 import io.github.karadkar.sample.data.NasaImageResponse
 
 data class NasaPictureGridItem(
@@ -19,9 +20,7 @@ data class NasaPicturesViewState(
 
 sealed class NasaPicturesViewEffect {
     data class OpenImageDetailScreenEffect(val imageId: String) : NasaPicturesViewEffect()
-
-    // FixMe: use resource string for messages
-    data class ShowToastScreenEffect(val message: String) : NasaPicturesViewEffect()
+    data class ShowToastScreenEffect(@StringRes val message: Int) : NasaPicturesViewEffect()
 }
 
 sealed class NasaPicturesViewEvent {

@@ -6,4 +6,5 @@
     <string name="pull_down_to_refresh">Pull down to refresh</string>
     <string name="description_picture_in_detail_screen">picture in detail screen</string>
     <string name="format_picture_author">By %s On %s</string>
+    <string name="generic_error_message">Oops! Something went wrong!</string>
 </resources>

@@ -1,5 +1,6 @@
 package io.github.karadkar.sample.gridui
 
+import io.github.karadkar.sample.R
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.data.NasaImageResponse
 import io.github.karadkar.sample.gridui.NasaPicturesViewEffect.OpenImageDetailScreenEffect
@@ -108,7 +109,7 @@ class NasaPicturesViewModelTest {
         viewEffectTester.apply {
             assertNoErrors()
             assertValueCount(1)
-            assertValueAt(0, ShowToastScreenEffect("Oops! Something went wrong!"))
+            assertValueAt(0, ShowToastScreenEffect(R.string.generic_error_message))
         }
     }
 

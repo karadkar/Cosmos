@@ -1,6 +1,7 @@
 package io.github.karadkar.sample.gridui
 
 import androidx.lifecycle.ViewModel
+import io.github.karadkar.sample.R
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.gridui.NasaPicturesEventResult.*
 import io.github.karadkar.sample.gridui.NasaPicturesViewEffect.*
@@ -111,7 +112,7 @@ class NasaPicturesViewModel(
                     is ImageClickResult -> OpenImageDetailScreenEffect(eventResult.imageId)
                     is ErrorResult -> {
                         logError("something went wrong", eventResult.throwable)
-                        ShowToastScreenEffect("Oops! Something went wrong!")
+                        ShowToastScreenEffect(R.string.generic_error_message)
                     }
                     else -> error("unknown result $eventResult for view-effect")
                 }
