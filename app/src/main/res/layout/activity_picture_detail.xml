@@ -46,7 +46,6 @@
                 android:id="@+id/bottom_sheet_head"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/picture_detail_bottom_sheet_peek_height"
-                android:animateLayoutChanges="true"
                 android:padding="16dp">
 
                 <ImageView

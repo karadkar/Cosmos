@@ -1,5 +1,7 @@
 package io.github.karadkar.sample.detailui
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -75,9 +77,6 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun updateBottomSheet(detail: PictureDetail) {
-//        if (bottomSheet.state != BottomSheetBehavior.STATE_COLLAPSED) {
-//            bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
-//        }
         // TODO: add fade in animation for tile
         val authorDetails = if (detail.author.isNotEmpty()) {
             authorDetailStringFormat.format(detail.author, detail.getFormattedDateString())
@@ -86,7 +85,16 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         binding.apply {
-            tvPictureDetailTitle.text = detail.title
+            tvPictureDetailTitle.also { tv ->
+                if (tv.text == detail.title) return // avoid animation
+                // fade-out before setting new title
+                tv.animate().alpha(0f).setDuration(300).setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        tv.text = detail.title
+                        tv.animate().alpha(1f).setDuration(300) // fade-in
+                    }
+                })
+            }
             tvPictureDetailAuther.text = authorDetails
             tvPictureDetailDescription.text = detail.description
         }
