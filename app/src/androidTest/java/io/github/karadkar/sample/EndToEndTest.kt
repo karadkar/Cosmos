@@ -1,6 +1,5 @@
 package io.github.karadkar.sample
 
-import android.widget.ImageView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -110,19 +109,17 @@ class EndToEndTest : KoinTest {
 
         // verify title on bottom sheet
         assertDisplayed(R.id.tv_picture_detail_title, data.title)
-        assertAny<ImageView>(R.id.ib_expand_collapse) { it.rotation == 0f }
 
         // click on bottom sheet to expand
         clickOn(R.id.bottom_sheet_head)
         withBottomSheetResource(expandedResource) {
             assertDisplayed(R.id.tv_picture_detail_description, data.explanation)
-            assertAny<ImageView>(R.id.ib_expand_collapse) { it.rotation == 180f }
         }
 
         // collapse bottom sheet
         clickOn(R.id.bottom_sheet_head)
         withBottomSheetResource(collapsedResource) {
-            assertAny<ImageView>(R.id.ib_expand_collapse) { it.rotation == 0f }
+            // nothing
         }
     }
 
