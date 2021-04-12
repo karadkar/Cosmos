@@ -71,7 +71,9 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
         }
         binding.apply {
             if (ibExpandCollapse.rotation != state.bottomSheetIndicatorRotation) {
-                ibExpandCollapse.rotation = state.bottomSheetIndicatorRotation
+                ibExpandCollapse.animate()
+                    .rotation(state.bottomSheetIndicatorRotation)
+                    .setDuration(300)
             }
         }
     }
