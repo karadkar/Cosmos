@@ -24,6 +24,7 @@ class NasaPicturesViewModel(
     val viewEffect: Observable<NasaPicturesViewEffect>
 
     init {
+        // for replay and auto-connect refer https://tech.instacart.com/view-model-state-preservation-using-autoconnect-d75ee791954b
         eventEmitter
             .doOnNext { logInfo("---> event: $it") }
             .eventToResult()
@@ -32,6 +33,7 @@ class NasaPicturesViewModel(
             .also { result ->
                 viewState = result.resultToViewState()
                     .doOnNext { logInfo("---> state: $it") }
+                    // replay will provide the last emitted value to new subscribers
                     .replay(1)
                     .autoConnect(1) {
                         disposable = it
@@ -53,6 +55,8 @@ class NasaPicturesViewModel(
     }
 
     private fun Observable<NasaPicturesViewEvent>.eventToResult(): Observable<NasaPicturesEventResult> {
+        // using publish ensure upstream Observable is shared between merged sources
+        // without publish, upstream will be subscribed individually by merged sources
         return publish { o ->
             Observable.merge(
                 o.ofType(ScreenLoadEvent::class.java).onScreenLoadResult(),
