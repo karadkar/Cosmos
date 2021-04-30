@@ -19,7 +19,6 @@ class NasaPicturesActivity : AppCompatActivity() {
     private val viewModel: NasaPicturesViewModel by viewModel()
     private val disposable = CompositeDisposable()
     private lateinit var adapter: NasaPicturesListAdapter
-    private val spanCount = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +50,7 @@ class NasaPicturesActivity : AppCompatActivity() {
         adapter = NasaPicturesListAdapter(this) { clickedItem ->
             viewModel.submitEvent(NasaPicturesViewEvent.ImageClickEvent(imageId = clickedItem.id))
         }
+        val spanCount = resources.getInteger(R.integer.pictures_span_count)
         val layoutManager = GridLayoutManager(this, spanCount, GridLayoutManager.VERTICAL, false)
         val itemDecorator = PictureItemDecorator(
             space = resources.getDimensionPixelSize(R.dimen.grid_space),
