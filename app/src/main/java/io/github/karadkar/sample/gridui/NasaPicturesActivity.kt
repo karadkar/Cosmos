@@ -42,7 +42,9 @@ class NasaPicturesActivity : AppCompatActivity() {
             })
             .addTo(disposable)
 
-        viewModel.submitEvent(NasaPicturesViewEvent.ScreenLoadEvent)
+        if (savedInstanceState == null) {
+            viewModel.submitEvent(NasaPicturesViewEvent.ScreenLoadEvent)
+        } // else screen is rotating, skip the screen-load event
     }
 
     private fun setupListAdapter() {

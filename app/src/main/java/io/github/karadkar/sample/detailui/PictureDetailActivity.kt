@@ -57,7 +57,9 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
                 logError("error observing view-state", it)
             }).addTo(disposable)
 
-        viewModel.submitEvent(PictureDetailViewEvent.ScreenLoadEvent(defaultImageId))
+        if (savedInstanceState == null) {
+            viewModel.submitEvent(PictureDetailViewEvent.ScreenLoadEvent(defaultImageId))
+        } // else screen is rotating skip the event
     }
 
     private fun renderViewState(state: PictureDetailViewState) {
