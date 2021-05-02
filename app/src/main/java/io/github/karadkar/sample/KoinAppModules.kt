@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.data.NasaImageResponseDao
 import io.github.karadkar.sample.data.NasaPicturesApiService
+import io.github.karadkar.sample.data.PictureStorageHelper
 import io.github.karadkar.sample.detailui.PictureDetailViewModel
 import io.github.karadkar.sample.gridui.NasaPicturesViewModel
 import io.github.karadkar.sample.utils.AppConstants
@@ -17,6 +18,7 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -93,11 +95,16 @@ val appModule = module {
         return@single NasaImageRepository(apiService = get(), imageResponseDao = get(), rxSchedulers = get())
     }
 
+    single<PictureStorageHelper> {
+        PictureStorageHelper(applicationContext = androidApplication())
+    }
+
     viewModel {
         return@viewModel NasaPicturesViewModel(repository = get(), rxSchedulers = get())
     }
+
     viewModel {
-        return@viewModel PictureDetailViewModel(repository = get())
+        return@viewModel PictureDetailViewModel(repository = get(), storageHelper = get(), rxSchedulers = get())
     }
 }
 

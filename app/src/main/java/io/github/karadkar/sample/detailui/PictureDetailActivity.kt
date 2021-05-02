@@ -5,7 +5,10 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -57,9 +60,43 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
                 logError("error observing view-state", it)
             }).addTo(disposable)
 
+        viewModel.viewEffect
+            .subscribe({ effect ->
+                triggerViewEffect(effect)
+            }, {
+                logError("error observing view-effect", it)
+            }).addTo(disposable)
+
         if (savedInstanceState == null) {
             viewModel.submitEvent(PictureDetailViewEvent.ScreenLoadEvent(defaultImageId))
         } // else screen is rotating skip the event
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.picture_details_menu, menu)
+        return true
+    }
+
+    private fun triggerViewEffect(effect: PictureDetailViewEffect) {
+        when (effect) {
+            is PictureDetailViewEffect.PictureSaved -> {
+                Toast.makeText(this, "Picture Saved", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_save_picture -> {
+                viewModel.submitEvent(PictureDetailViewEvent.SavePicture)
+                true
+            }
+            R.id.menu_set_as_wallpaper -> {
+                viewModel.submitEvent(PictureDetailViewEvent.SetAsWallpaper)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun renderViewState(state: PictureDetailViewState) {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/menu_save_picture"
+        android:icon="@drawable/ic_save"
+        android:title="@string/action_save_picture"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/menu_set_as_wallpaper"
+        android:icon="@drawable/ic_wallpaper"
+        android:title="@string/action_set_as_wallpaper"
+        android:tooltipText="@string/action_set_as_wallpaper"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText" />
+
+</menu>
