@@ -2,8 +2,10 @@ package io.github.karadkar.sample.gridui
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.karadkar.sample.R
 import io.github.karadkar.sample.databinding.ActivityNasaPicturesBinding
 import io.github.karadkar.sample.detailui.PictureDetailActivity
@@ -11,12 +13,12 @@ import io.github.karadkar.sample.utils.addTo
 import io.github.karadkar.sample.utils.logError
 import io.github.karadkar.sample.utils.visibleOrGone
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.android.viewmodel.ext.android.viewModel
 
 
+@AndroidEntryPoint
 class NasaPicturesActivity : AppCompatActivity() {
     lateinit var binding: ActivityNasaPicturesBinding
-    private val viewModel: NasaPicturesViewModel by viewModel()
+    private val viewModel: NasaPicturesViewModel by viewModels()
     private val disposable = CompositeDisposable()
     private lateinit var adapter: NasaPicturesListAdapter
 

@@ -10,6 +10,7 @@ object Versions {
     const val realmDbGradlePlugin = "6.1.0"
     const val kotlin = "1.4.30"
     const val koinVersion = "2.2.0"
+    const val daggerHilt = "2.35"
 }
 
 object Libraries {
@@ -24,6 +25,7 @@ object Libraries {
     const val kotlinStdlibJdk7 = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
     const val appcompat = "androidx.appcompat:appcompat:1.1.0"
     const val coreKtx = "androidx.core:core-ktx:1.1.0"
+    const val fragmentKtx = "androidx.fragment:fragment-ktx:1.3.3"
 
     const val recyclerView = "androidx.recyclerview:recyclerview:1.0.0"
     const val materialComponents = "com.google.android.material:material:1.1.0"
@@ -45,6 +47,9 @@ object Libraries {
     const val kaptDatabindingCompiler = "com.android.databinding:compiler:${Versions.gradlePlugin}"
 
     const val koinViewModel = "org.koin:koin-android-viewmodel:${Versions.koinVersion}"
+
+    const val hiltCompiler = "com.google.dagger:hilt-compiler:${Versions.daggerHilt}"
+    const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.daggerHilt}"
 
     //region Testing dependencies
     const val junit = "junit:junit:4.12"

@@ -1,6 +1,7 @@
 package io.github.karadkar.sample.detailui
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.data.PictureStorageHelper
 import io.github.karadkar.sample.detailui.PictureDetailEventResult.*
@@ -10,8 +11,10 @@ import io.github.karadkar.sample.utils.logInfo
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import javax.inject.Inject
 
-class PictureDetailViewModel(
+@HiltViewModel
+class PictureDetailViewModel @Inject constructor(
     private val repository: NasaImageRepository,
     private val storageHelper: PictureStorageHelper,
     private val rxSchedulers: AppRxSchedulers

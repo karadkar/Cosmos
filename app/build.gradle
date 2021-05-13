@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 30
@@ -26,6 +27,14 @@ android {
         dataBinding = true
         viewBinding = true
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -33,6 +42,7 @@ dependencies {
     implementation Libraries.kotlinStdlibJdk7
     implementation Libraries.appcompat
     implementation Libraries.coreKtx
+    implementation Libraries.fragmentKtx
 
     implementation Libraries.lifecycleReactiveStreamExtension
     implementation Libraries.lifecycleExtensions // live-data view-model
@@ -71,7 +81,9 @@ dependencies {
     implementation Libraries.retrofitRxJava2Adapter
     implementation Libraries.okHttpLoggingInterceptor
 
-    implementation Libraries.koinViewModel
-
     kapt Libraries.kaptRealmFieldHelper
+
+    implementation Libraries.hiltAndroid
+    kapt Libraries.hiltCompiler
+
 }
