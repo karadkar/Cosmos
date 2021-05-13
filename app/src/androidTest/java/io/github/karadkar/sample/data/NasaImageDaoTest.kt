@@ -10,10 +10,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.test.KoinTest
 
 @RunWith(AndroidJUnit4::class)
-class NasaImageDaoTest : KoinTest {
+class NasaImageDaoTest {
 
     private lateinit var dao: NasaImageResponseDao
     private lateinit var realm: Realm

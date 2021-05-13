@@ -9,24 +9,25 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.karadkar.sample.R
 import io.github.karadkar.sample.databinding.ActivityPictureDetailBinding
 import io.github.karadkar.sample.utils.addTo
 import io.github.karadkar.sample.utils.logError
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.android.viewmodel.ext.android.viewModel
 
-
+@AndroidEntryPoint
 class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private lateinit var binding: ActivityPictureDetailBinding
 
-    private val viewModel: PictureDetailViewModel by viewModel()
+    private val viewModel: PictureDetailViewModel by viewModels()
     private lateinit var bottomSheet: BottomSheetBehavior<MaterialCardView>
     private lateinit var defaultImageId: String
     private lateinit var authorDetailStringFormat: String

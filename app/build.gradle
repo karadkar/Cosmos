@@ -59,9 +59,7 @@ dependencies {
     testImplementation Libraries.mockk
     testImplementation Libraries.coreTesting
     testImplementation Libraries.mockWebServer
-    testImplementation Libraries.koinTest
 
-    androidTestImplementation Libraries.koinTest
     androidTestImplementation Libraries.testExt
     androidTestImplementation Libraries.mockkAndroid
     androidTestImplementation(Libraries.barista){
@@ -86,4 +84,6 @@ dependencies {
     implementation Libraries.hiltAndroid
     kapt Libraries.hiltCompiler
 
+    androidTestImplementation Libraries.hiltAndroidTesting
+    kaptAndroidTest Libraries.hiltAndroidTestCompiler
 }

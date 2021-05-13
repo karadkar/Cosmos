@@ -50,6 +50,8 @@ object Libraries {
 
     const val hiltCompiler = "com.google.dagger:hilt-compiler:${Versions.daggerHilt}"
     const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.daggerHilt}"
+    const val hiltAndroidTesting = "com.google.dagger:hilt-android-testing:${Versions.daggerHilt}"
+    const val hiltAndroidTestCompiler = "com.google.dagger:hilt-android-compiler:${Versions.daggerHilt}"
 
     //region Testing dependencies
     const val junit = "junit:junit:4.12"
