@@ -7,9 +7,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.karadkar.sample.utils.AppConstants
 import okhttp3.HttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -33,11 +31,6 @@ object RetrofitModule {
     @Provides
     fun okHttpClient(): OkHttpClient {
         return OkHttpProvider.okHttpClient
-    }
-
-    @Provides
-    fun baseNasaImageUrl(): HttpUrl {
-        return AppConstants.BASE_URL_NASA_IMAGES.toHttpUrl()
     }
 
     @Provides
