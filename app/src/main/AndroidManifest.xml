@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".NasaPicturesApp"
-        android:networkSecurityConfig="@xml/mocky_network_sercurity_config"
+        android:networkSecurityConfig="@xml/localhost_network_sercurity_config"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
 
