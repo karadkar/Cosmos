@@ -70,6 +70,7 @@ dependencies {
     androidTestImplementation Libraries.testRunner
     androidTestImplementation Libraries.espressoCore
     androidTestImplementation Libraries.truthAssersions
+    androidTestImplementation Libraries.mockWebServer
 
     implementation Libraries.rxJava2
     implementation Libraries.rxAndroid2
