@@ -1,4 +1,4 @@
-package io.github.karadkar.sample.detailui
+package io.github.karadkar.sample
 
 import androidx.test.rule.ActivityTestRule
 import com.schibsted.spain.barista.assertion.BaristaListAssertions
@@ -11,7 +11,6 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
-import io.github.karadkar.sample.R
 import io.github.karadkar.sample.di.BaseUrlModule
 import io.github.karadkar.sample.di.OkHttpProvider
 import io.github.karadkar.sample.gridui.NasaPicturesActivity
@@ -27,7 +26,7 @@ import org.junit.rules.RuleChain
 
 @UninstallModules(BaseUrlModule::class)
 @HiltAndroidTest
-class PictureDetailActivityTest {
+class NasaPicturesActivityTest {
 
     val hiltRule = HiltAndroidRule(this)
 
