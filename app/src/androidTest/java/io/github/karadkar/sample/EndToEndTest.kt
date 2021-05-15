@@ -1,11 +1,13 @@
 package io.github.karadkar.sample
 
+import androidx.test.annotation.UiThreadTest
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
+import com.google.common.truth.Truth.assertThat
 import com.schibsted.spain.barista.assertion.BaristaAssertions.assertAny
 import com.schibsted.spain.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
 import com.schibsted.spain.barista.assertion.BaristaListAssertions.assertListItemCount
@@ -23,10 +25,12 @@ import io.github.karadkar.sample.gridui.NasaPicturesActivity
 import io.github.karadkar.sample.rules.BottomSheetStateIdlingResource
 import io.github.karadkar.sample.rules.IdlingResourceRule
 import io.github.karadkar.sample.utils.TestDataProvider
+import io.realm.Realm
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
 // Using Barista for espresso
 // https://github.com/AdevintaSpain/Barista
@@ -42,19 +46,25 @@ class EndToEndTest {
     @get:Rule(order = 2)
     val activityRule = ActivityTestRule(NasaPicturesActivity::class.java, true, false)
 
+    @Inject
+    lateinit var realm: Realm
+
     // creating data from json file
     val testData: List<NasaImageResponse> = TestDataProvider.nasaImageResponseList
 
     private lateinit var idlingRegistry: IdlingRegistry
 
     @Before
+    @UiThreadTest
     fun setup() {
+        hiltRule.inject()
         idlingRegistry = IdlingRegistry.getInstance()
     }
 
     @After
+    @UiThreadTest
     fun tearDown() {
-
+        realm.executeTransaction { it.deleteAll() }
     }
 
     @Test

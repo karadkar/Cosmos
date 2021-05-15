@@ -25,10 +25,6 @@ object NasaRepoModule {
     }
 
     @Provides
-    @MainThread
-    fun realm(): Realm = Realm.getDefaultInstance()
-
-    @Provides
     fun nasaImageResponseDao(realm: Realm): NasaImageResponseDao {
         return NasaImageResponseDao(realm)
     }

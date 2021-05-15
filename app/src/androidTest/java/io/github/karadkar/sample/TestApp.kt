@@ -12,10 +12,12 @@ open class TestApp : Application() {
 
     protected open fun setupRealm() {
         Realm.init(this)
+
+        // in-memory realm configuration for faster operations
         Realm.setDefaultConfiguration(
             RealmConfiguration.Builder()
                 .schemaVersion(1)
-                .deleteRealmIfMigrationNeeded()
+                .inMemory()
                 .name("test-app.realm")
                 .build()
         )
