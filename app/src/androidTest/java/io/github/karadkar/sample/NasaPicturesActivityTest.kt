@@ -6,7 +6,6 @@ import com.schibsted.spain.barista.assertion.BaristaListAssertions.assertListIte
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.schibsted.spain.barista.interaction.BaristaListInteractions
-import com.schibsted.spain.barista.rule.cleardata.ClearFilesRule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -14,6 +13,7 @@ import dagger.hilt.android.testing.UninstallModules
 import io.github.karadkar.sample.di.BaseUrlModule
 import io.github.karadkar.sample.di.OkHttpProvider
 import io.github.karadkar.sample.gridui.NasaPicturesActivity
+import io.github.karadkar.sample.rules.DeleteRealmRule
 import io.github.karadkar.sample.rules.IdlingResourceRule
 import io.github.karadkar.sample.utils.TestDataProvider
 import io.github.karadkar.sample.utils.toJson
@@ -34,10 +34,8 @@ class NasaPicturesActivityTest {
 
     val activityRule = ActivityTestRule(NasaPicturesActivity::class.java, true, false)
 
-    val clearFilesRule = ClearFilesRule()
-
     @get:Rule
-    val ruleChain = RuleChain.outerRule(clearFilesRule)
+    val ruleChain = RuleChain.outerRule(DeleteRealmRule())
         .around(hiltRule).around(idlingResourceRule).around(activityRule)
 
     private val mockWebServer: MockWebServer = MockWebServer()
