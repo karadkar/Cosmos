@@ -13,7 +13,7 @@ open class TestApp : Application() {
     protected open fun setupRealm() {
         Realm.init(this)
 
-        // in-memory realm configuration for faster operations
+        // in-memory realm configuration to avoid flaky tests
         Realm.setDefaultConfiguration(
             RealmConfiguration.Builder()
                 .schemaVersion(1)
