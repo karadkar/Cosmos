@@ -19,8 +19,7 @@ class NasaImageDaoTest {
     private val testData = TestDataProvider.nasaImageResponseList.shuffled()
     private val configuration = RealmConfiguration.Builder()
         .schemaVersion(1)
-        .deleteRealmIfMigrationNeeded()
-        .name("test-app.realm")
+        .name("image-dao.realm") // should be different from apps default config
         .inMemory()
         .build()
 
