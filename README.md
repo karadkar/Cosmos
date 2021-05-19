@@ -14,6 +14,8 @@
 - JSON data is hosted `https://api.jsonbin.io/b/6069381f1c2ec27de8b09d47`
 - Disable animations before running Android Tests
 - Do Gradle sync if kotlin buildScr code completion/navigation is not working in Gradle files
+- [AssistedInject](https://dagger.dev/dev-guide/assisted-injection)
+- [AssistedInject for ViewModels](https://github.com/google/dagger/issues/2287#issuecomment-762108922)
 
 ### General Highlights
 - Grid view to display images

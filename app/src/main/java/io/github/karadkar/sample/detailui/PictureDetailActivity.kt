@@ -20,6 +20,7 @@ import io.github.karadkar.sample.databinding.ActivityPictureDetailBinding
 import io.github.karadkar.sample.utils.addTo
 import io.github.karadkar.sample.utils.logError
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
@@ -27,7 +28,13 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityPictureDetailBinding
 
-    private val viewModel: PictureDetailViewModel by viewModels()
+    @Inject
+    lateinit var factory: PictureDetailViewModel.Factory
+
+    private val viewModel: PictureDetailViewModel by viewModels {
+        PictureDetailViewModel.provideFactory(factory, "rohit-id-1")
+    }
+
     private lateinit var bottomSheet: BottomSheetBehavior<MaterialCardView>
     private lateinit var defaultImageId: String
     private lateinit var authorDetailStringFormat: String
