@@ -1,7 +1,6 @@
 package io.github.karadkar.sample.detailui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,16 +30,6 @@ class PictureDetailViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(defaultId: String): PictureDetailViewModel
-    }
-
-    companion object {
-        fun provideFactory(factory: Factory, defaultId: String): ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                    return factory.create(defaultId) as T
-                }
-            }
-        }
     }
 
     private val eventEmitter = PublishSubject.create<PictureDetailViewEvent>()
