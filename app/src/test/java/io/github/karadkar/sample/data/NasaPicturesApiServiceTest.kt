@@ -3,6 +3,7 @@ package io.github.karadkar.sample.data
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.truth.Truth.assertThat
 import io.github.karadkar.sample.di.NasaRepoModule
+import io.github.karadkar.sample.di.OkHttpProvider
 import io.github.karadkar.sample.di.RetrofitModule
 import io.github.karadkar.sample.utils.ResourceFileReader
 import io.github.karadkar.sample.utils.readValue
@@ -26,7 +27,7 @@ class NasaPicturesApiServiceTest {
         val retrofit: Retrofit
         RetrofitModule.apply {
             objectMapper = objectMapper()
-            val retrofitBuilder = retrofitBuilder(objectMapper, okHttpClient(httpLoggingInterceptor()))
+            val retrofitBuilder = retrofitBuilder(objectMapper, OkHttpProvider.okHttpClient)
             retrofit = retrofit(retrofitBuilder, mockWebServer.url("/"))
         }
         apiService = NasaRepoModule.nasaPictureService(retrofit)

@@ -19,7 +19,7 @@ class PictureDetailViewModel @AssistedInject constructor(
     private val repository: NasaImageRepository,
     private val storageHelper: PictureStorageHelper,
     private val rxSchedulers: AppRxSchedulers,
-    @Assisted private val defaultId: String
+    @Assisted private val defaultId: String // this is only to demonstrate assisted inject
 ) : ViewModel() {
 
     /**

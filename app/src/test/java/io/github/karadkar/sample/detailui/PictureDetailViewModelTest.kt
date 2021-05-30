@@ -34,7 +34,8 @@ class PictureDetailViewModelTest {
         viewModel = PictureDetailViewModel(
             repository = mockRepo,
             storageHelper = mockStorageHelper,
-            rxSchedulers = TestAppRxSchedulersProvider()
+            rxSchedulers = TestAppRxSchedulersProvider(),
+            defaultId = "random-id"
         )
         viewStateTester = viewModel.viewState.test()
     }
