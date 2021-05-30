@@ -4,32 +4,24 @@ import android.app.Application
 import com.squareup.picasso.LruCache
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.HiltAndroidApp
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
-import org.koin.android.ext.android.inject
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
+import javax.inject.Inject
 
+@HiltAndroidApp
 open class NasaPicturesApp : Application() {
+    @Inject
+    lateinit var okHttpClient: OkHttpClient
+
     override fun onCreate() {
         super.onCreate()
-        setupKoin()
         setPicassoSingleton()
         setupRealm()
     }
 
-    protected open fun setupKoin() {
-        startKoin {
-            androidLogger()
-            androidContext(this@NasaPicturesApp)
-            modules(nasaPicturesAppKoinModules)
-        }
-    }
-
     private fun setPicassoSingleton() {
-        val okHttpClient by inject<OkHttpClient>() // koin
         val picassoInstance = Picasso.Builder(this)
             .downloader(OkHttp3Downloader(okHttpClient))
             .memoryCache(LruCache(100 * 1024 * 1024))

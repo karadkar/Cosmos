@@ -2,7 +2,6 @@ package io.github.karadkar.sample
 
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -16,33 +15,37 @@ import com.schibsted.spain.barista.interaction.BaristaListInteractions.clickList
 import com.schibsted.spain.barista.interaction.BaristaListInteractions.scrollListToPosition
 import com.schibsted.spain.barista.interaction.BaristaViewPagerInteractions.swipeViewPagerBack
 import com.schibsted.spain.barista.interaction.BaristaViewPagerInteractions.swipeViewPagerForward
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.karadkar.sample.data.NasaImageResponse
+import io.github.karadkar.sample.di.OkHttpProvider
 import io.github.karadkar.sample.gridui.NasaPicturesActivity
 import io.github.karadkar.sample.rules.BottomSheetStateIdlingResource
+import io.github.karadkar.sample.rules.DeleteRealmRule
 import io.github.karadkar.sample.rules.IdlingResourceRule
 import io.github.karadkar.sample.utils.TestDataProvider
-import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.koin.test.KoinTest
-import org.koin.test.inject
-
 
 // Using Barista for espresso
 // https://github.com/AdevintaSpain/Barista
-@RunWith(AndroidJUnit4::class)
 @LargeTest
-class EndToEndTest : KoinTest {
-    private val okHttpClient by inject<OkHttpClient>()
+@HiltAndroidTest
+class EndToEndTest {
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
-    val idlingResourceRule = IdlingResourceRule(okHttpClient)
+    @get:Rule(order = 1)
+    val idlingResourceRule = IdlingResourceRule(OkHttpProvider.okHttpClient)
 
-    @get:Rule
+    @get:Rule(order = 2)
+    val deleteRealmRule = DeleteRealmRule()// deleting all data so it doesn't interfere with other tests
+
+    @get:Rule(order = 3)
     val activityRule = ActivityTestRule(NasaPicturesActivity::class.java, true, false)
+
 
     // creating data from json file
     val testData: List<NasaImageResponse> = TestDataProvider.nasaImageResponseList
@@ -56,7 +59,6 @@ class EndToEndTest : KoinTest {
 
     @After
     fun tearDown() {
-
     }
 
     @Test

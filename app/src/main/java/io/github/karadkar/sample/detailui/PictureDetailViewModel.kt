@@ -1,6 +1,9 @@
 package io.github.karadkar.sample.detailui
 
 import androidx.lifecycle.ViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.data.PictureStorageHelper
 import io.github.karadkar.sample.detailui.PictureDetailEventResult.*
@@ -11,11 +14,23 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 
-class PictureDetailViewModel(
+@Suppress("UNCHECKED_CAST")
+class PictureDetailViewModel @AssistedInject constructor(
     private val repository: NasaImageRepository,
     private val storageHelper: PictureStorageHelper,
-    private val rxSchedulers: AppRxSchedulers
+    private val rxSchedulers: AppRxSchedulers,
+    @Assisted private val defaultId: String // this is only to demonstrate assisted inject
 ) : ViewModel() {
+
+    /**
+     * Read more about assisted inject
+     * https://dagger.dev/dev-guide/assisted-injection
+     * https://github.com/google/dagger/issues/2287#issuecomment-762108922
+     */
+    @AssistedFactory
+    interface Factory {
+        fun create(defaultId: String): PictureDetailViewModel
+    }
 
     private val eventEmitter = PublishSubject.create<PictureDetailViewEvent>()
     private lateinit var disposable: Disposable
@@ -24,6 +39,7 @@ class PictureDetailViewModel(
     val viewEffect: Observable<PictureDetailViewEffect>
 
     init {
+        logInfo("initialized with $defaultId")
 
         eventEmitter
             .doOnNext { logInfo("---> event: $it") }

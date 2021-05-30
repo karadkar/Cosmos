@@ -10,18 +10,16 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.test.KoinTest
 
 @RunWith(AndroidJUnit4::class)
-class NasaImageDaoTest : KoinTest {
+class NasaImageDaoTest {
 
     private lateinit var dao: NasaImageResponseDao
     private lateinit var realm: Realm
     private val testData = TestDataProvider.nasaImageResponseList.shuffled()
     private val configuration = RealmConfiguration.Builder()
         .schemaVersion(1)
-        .deleteRealmIfMigrationNeeded()
-        .name("test-app.realm")
+        .name("image-dao.realm") // should be different from apps default config
         .inMemory()
         .build()
 

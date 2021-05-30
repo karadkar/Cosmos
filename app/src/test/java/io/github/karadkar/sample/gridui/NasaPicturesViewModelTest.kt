@@ -37,7 +37,7 @@ class NasaPicturesViewModelTest {
     @Before
     fun setUp() {
         mockRepository = mockk()
-        viewModel = NasaPicturesViewModel(mockRepository, rxSchedulers)
+        viewModel = NasaPicturesViewModel(mockRepository)
         viewStateTester = viewModel.viewState.test()
         viewEffectTester = viewModel.viewEffect.test()
         daoValueEmitter = BehaviorSubject.create()
