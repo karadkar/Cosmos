@@ -14,3 +14,20 @@
 - JSON data is hosted `https://api.jsonbin.io/b/6069381f1c2ec27de8b09d47`
 - Disable animations before running Android Tests
 - Do Gradle sync if kotlin buildScr code completion/navigation is not working in Gradle files
+- [AssistedInject](https://dagger.dev/dev-guide/assisted-injection)
+- [AssistedInject for ViewModels](https://github.com/google/dagger/issues/2287#issuecomment-762108922)
+
+### General Highlights
+- Grid view to display images
+- Detail page to scroll through list of images
+- save picture to device storage
+- ViewPager2 used with recyclerview adapter
+
+### Highlights in Testing
+- Replacing HttpUrl dependency with MockWebServer url to mock the api data (NasaPicturesActivityTest.kt)[app/src/androidTest/java/io/github/karadkar/sample/NasaPicturesActivityTest.kt] 
+- Verifying Bottom sheet data based on its state (BottomSheetIdlingResource.kt)[app/src/androidTest/java/io/github/karadkar/sample/rules/BottomSheetIdlingResource.kt]
+- Rule to delete all realm data before tests
+- Testing Realm dao with instrumentation tests.
+  Replacing Async operation with Sync operation during tests.
+  See `RealmExtensions.kt` in `main` and `test` dir
+- Reading raw `json` files from `resoureces` dir. See (ResourceFileReader.kt)[app/src/main/java/io/github/karadkar/sample/utils/ResourceFileReader.kt] 

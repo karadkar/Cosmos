@@ -2,46 +2,39 @@ package io.github.karadkar.sample.data
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.truth.Truth.assertThat
-import io.github.karadkar.sample.nasaPicturesAppKoinModules
-import io.github.karadkar.sample.utils.AppConstants
+import io.github.karadkar.sample.di.NasaRepoModule
+import io.github.karadkar.sample.di.OkHttpProvider
+import io.github.karadkar.sample.di.RetrofitModule
 import io.github.karadkar.sample.utils.ResourceFileReader
 import io.github.karadkar.sample.utils.readValue
-import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.koin.core.context.loadKoinModules
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
-import org.koin.test.KoinTest
-import org.koin.test.get
+import retrofit2.Retrofit
 
-class NasaPicturesApiServiceTest : KoinTest {
+class NasaPicturesApiServiceTest {
     lateinit var mockWebServer: MockWebServer
     private val nasaImagesJsonData = ResourceFileReader("nasa_images.json").content
+    private lateinit var apiService: NasaPicturesApiService
+    private lateinit var objectMapper: ObjectMapper
 
     @Before
     fun setup() {
         mockWebServer = MockWebServer()
-        startKoin {
-            val testModules = module {
-                // override base url used for retrofit with mock-web-server
-                single<HttpUrl>(named(AppConstants.ModuleNames.NASA_IMAGES), override = true) {
-                    return@single mockWebServer.url("/")
-                }
-            }
-            loadKoinModules(nasaPicturesAppKoinModules + testModules)
+
+        val retrofit: Retrofit
+        RetrofitModule.apply {
+            objectMapper = objectMapper()
+            val retrofitBuilder = retrofitBuilder(objectMapper, OkHttpProvider.okHttpClient)
+            retrofit = retrofit(retrofitBuilder, mockWebServer.url("/"))
         }
-        mockWebServer.start()
+        apiService = NasaRepoModule.nasaPictureService(retrofit)
     }
 
     @After
     fun teardown() {
-        stopKoin()
         mockWebServer.shutdown()
     }
 
@@ -49,11 +42,10 @@ class NasaPicturesApiServiceTest : KoinTest {
     fun `get images returns response similar to json`() {
         mockWebServer.enqueue(MockResponse().setBody(nasaImagesJsonData))
 
-        val apiService = get<NasaPicturesApiService>() // from koin
         val testSub = apiService.getImages().test()
         testSub.assertComplete()
 
-        val expectedImageResponseList: List<NasaImageResponse> = get<ObjectMapper>().readValue(nasaImagesJsonData)
+        val expectedImageResponseList: List<NasaImageResponse> = objectMapper.readValue(nasaImagesJsonData)
 
         testSub.assertValue(expectedImageResponseList)
 

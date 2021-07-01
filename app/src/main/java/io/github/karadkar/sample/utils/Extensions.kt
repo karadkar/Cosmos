@@ -37,3 +37,7 @@ fun ObjectMapper.configureCommon(): ObjectMapper {
 inline fun <reified T> ObjectMapper.readValue(jsonData: String): T {
     return this.readValue(jsonData, object : TypeReference<T>() {})
 }
+
+fun Any.toJson(): String {
+    return ObjectMapper().configureCommon().writer().writeValueAsString(this)
+}

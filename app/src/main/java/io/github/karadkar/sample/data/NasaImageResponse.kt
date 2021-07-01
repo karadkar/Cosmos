@@ -2,7 +2,7 @@ package io.github.karadkar.sample.data
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonSetter
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -13,29 +13,29 @@ open class NasaImageResponse : RealmObject() {
     @PrimaryKey
     var id: String = ""
 
-    @JsonSetter("copyright")
+    @JsonProperty("copyright")
     var copyright: String = ""
 
-    @JsonSetter("")
+    @JsonProperty("")
     @JsonFormat(pattern = dateFormat, shape = JsonFormat.Shape.STRING)
     var date: Date? = null
 
-    @JsonSetter("explanation")
+    @JsonProperty("explanation")
     var explanation: String = ""
 
-    @JsonSetter("hdurl")
+    @JsonProperty("hdurl")
     var imageUrlHd: String = ""
 
-    @JsonSetter("media_type")
+    @JsonProperty("media_type")
     var mediaType: String = ""
 
-    @JsonSetter("service_version")
+    @JsonProperty("service_version")
     var serviceVersion: String = ""
 
-    @JsonSetter("title")
+    @JsonProperty("title")
     var title: String = ""
 
-    @JsonSetter("url")
+    @JsonProperty("url")
     var imageUrlSd: String = ""
 
     companion object {

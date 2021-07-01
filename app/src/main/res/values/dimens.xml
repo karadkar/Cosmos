@@ -2,4 +2,6 @@
 <resources>
     <dimen name="grid_space">12dp</dimen>
     <dimen name="picture_detail_bottom_sheet_peek_height">88dp</dimen>
+    <dimen name="item_nasa_picture_height">320dp</dimen>
+    <integer name="pictures_span_count">2</integer>
 </resources>

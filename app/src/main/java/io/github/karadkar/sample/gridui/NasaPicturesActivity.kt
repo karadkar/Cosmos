@@ -2,8 +2,10 @@ package io.github.karadkar.sample.gridui
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.karadkar.sample.R
 import io.github.karadkar.sample.databinding.ActivityNasaPicturesBinding
 import io.github.karadkar.sample.detailui.PictureDetailActivity
@@ -11,15 +13,14 @@ import io.github.karadkar.sample.utils.addTo
 import io.github.karadkar.sample.utils.logError
 import io.github.karadkar.sample.utils.visibleOrGone
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.android.viewmodel.ext.android.viewModel
 
 
+@AndroidEntryPoint
 class NasaPicturesActivity : AppCompatActivity() {
     lateinit var binding: ActivityNasaPicturesBinding
-    private val viewModel: NasaPicturesViewModel by viewModel()
+    private val viewModel: NasaPicturesViewModel by viewModels()
     private val disposable = CompositeDisposable()
     private lateinit var adapter: NasaPicturesListAdapter
-    private val spanCount = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,13 +43,16 @@ class NasaPicturesActivity : AppCompatActivity() {
             })
             .addTo(disposable)
 
-        viewModel.submitEvent(NasaPicturesViewEvent.ScreenLoadEvent)
+        if (savedInstanceState == null) {
+            viewModel.submitEvent(NasaPicturesViewEvent.ScreenLoadEvent)
+        } // else screen is rotating, skip the screen-load event
     }
 
     private fun setupListAdapter() {
         adapter = NasaPicturesListAdapter(this) { clickedItem ->
             viewModel.submitEvent(NasaPicturesViewEvent.ImageClickEvent(imageId = clickedItem.id))
         }
+        val spanCount = resources.getInteger(R.integer.pictures_span_count)
         val layoutManager = GridLayoutManager(this, spanCount, GridLayoutManager.VERTICAL, false)
         val itemDecorator = PictureItemDecorator(
             space = resources.getDimensionPixelSize(R.dimen.grid_space),

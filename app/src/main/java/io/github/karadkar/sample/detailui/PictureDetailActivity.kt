@@ -5,25 +5,33 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.karadkar.sample.R
 import io.github.karadkar.sample.databinding.ActivityPictureDetailBinding
 import io.github.karadkar.sample.utils.addTo
+import io.github.karadkar.sample.utils.configureViewModel
 import io.github.karadkar.sample.utils.logError
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.android.viewmodel.ext.android.viewModel
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private lateinit var binding: ActivityPictureDetailBinding
 
-    private val viewModel: PictureDetailViewModel by viewModel()
+    @Inject
+    lateinit var factory: PictureDetailViewModel.Factory
+
+    private lateinit var viewModel: PictureDetailViewModel
     private lateinit var bottomSheet: BottomSheetBehavior<MaterialCardView>
     private lateinit var defaultImageId: String
     private lateinit var authorDetailStringFormat: String
@@ -33,6 +41,8 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         defaultImageId = intent?.getStringExtra(keyImageId) ?: error("default image-id no provided")
+        viewModel = configureViewModel { factory.create(defaultId = "assisted-id-4") }
+
         binding = ActivityPictureDetailBinding.inflate(layoutInflater)
         authorDetailStringFormat = getString(R.string.format_picture_author)
         setContentView(binding.root)
@@ -57,7 +67,43 @@ class PictureDetailActivity : AppCompatActivity(), View.OnClickListener {
                 logError("error observing view-state", it)
             }).addTo(disposable)
 
-        viewModel.submitEvent(PictureDetailViewEvent.ScreenLoadEvent(defaultImageId))
+        viewModel.viewEffect
+            .subscribe({ effect ->
+                triggerViewEffect(effect)
+            }, {
+                logError("error observing view-effect", it)
+            }).addTo(disposable)
+
+        if (savedInstanceState == null) {
+            viewModel.submitEvent(PictureDetailViewEvent.ScreenLoadEvent(defaultImageId))
+        } // else screen is rotating skip the event
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.picture_details_menu, menu)
+        return true
+    }
+
+    private fun triggerViewEffect(effect: PictureDetailViewEffect) {
+        when (effect) {
+            is PictureDetailViewEffect.PictureSaved -> {
+                Toast.makeText(this, "Picture Saved", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_save_picture -> {
+                viewModel.submitEvent(PictureDetailViewEvent.SavePicture)
+                true
+            }
+            R.id.menu_set_as_wallpaper -> {
+                viewModel.submitEvent(PictureDetailViewEvent.SetAsWallpaper)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun renderViewState(state: PictureDetailViewState) {

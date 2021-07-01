@@ -7,4 +7,6 @@
     <string name="description_picture_in_detail_screen">picture in detail screen</string>
     <string name="format_picture_author">By %s On %s</string>
     <string name="generic_error_message">Oops! Something went wrong!</string>
+    <string name="action_save_picture">Save Picture</string>
+    <string name="action_set_as_wallpaper">Set As Wallpaper</string>
 </resources>

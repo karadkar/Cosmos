@@ -12,17 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".NasaPicturesApp"
-        android:networkSecurityConfig="@xml/mocky_network_sercurity_config"
+        android:networkSecurityConfig="@xml/localhost_network_sercurity_config"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
 
-        <activity
-            android:name=".detailui.PictureDetailActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".detailui.PictureDetailActivity" />
 
-        <activity
-            android:name=".gridui.NasaPicturesActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".gridui.NasaPicturesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

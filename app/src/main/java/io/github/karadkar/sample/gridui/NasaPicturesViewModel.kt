@@ -1,21 +1,22 @@
 package io.github.karadkar.sample.gridui
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.karadkar.sample.R
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.gridui.NasaPicturesEventResult.*
 import io.github.karadkar.sample.gridui.NasaPicturesViewEffect.*
 import io.github.karadkar.sample.gridui.NasaPicturesViewEvent.*
-import io.github.karadkar.sample.utils.AppRxSchedulers
 import io.github.karadkar.sample.utils.logError
 import io.github.karadkar.sample.utils.logInfo
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import javax.inject.Inject
 
-class NasaPicturesViewModel(
-    private val repository: NasaImageRepository,
-    private val rxSchedulers: AppRxSchedulers
+@HiltViewModel
+class NasaPicturesViewModel @Inject constructor(
+    private val repository: NasaImageRepository
 ) : ViewModel() {
     private val eventEmitter = PublishSubject.create<NasaPicturesViewEvent>()
     private lateinit var disposable: Disposable

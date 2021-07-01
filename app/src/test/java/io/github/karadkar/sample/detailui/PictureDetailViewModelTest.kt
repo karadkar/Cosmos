@@ -3,6 +3,8 @@ package io.github.karadkar.sample.detailui
 import com.google.common.truth.Truth.assertThat
 import io.github.karadkar.sample.data.NasaImageRepository
 import io.github.karadkar.sample.data.NasaImageResponse
+import io.github.karadkar.sample.data.PictureStorageHelper
+import io.github.karadkar.sample.utils.TestAppRxSchedulersProvider
 import io.github.karadkar.sample.utils.TestDataProvider
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -17,6 +19,7 @@ class PictureDetailViewModelTest {
 
     private lateinit var viewModel: PictureDetailViewModel
     private lateinit var mockRepo: NasaImageRepository
+    private lateinit var mockStorageHelper: PictureStorageHelper
     private lateinit var viewStateTester: TestObserver<PictureDetailViewState>
 
     private val testResponseList: List<NasaImageResponse> = TestDataProvider.nasaImageResponseList
@@ -25,9 +28,15 @@ class PictureDetailViewModelTest {
     @Before
     fun setUp() {
         mockRepo = mockk()
+        mockStorageHelper = mockk()
         every { mockRepo.getFlowableImageResponseList() } returns Flowable.just(testResponseList)
 
-        viewModel = PictureDetailViewModel(mockRepo)
+        viewModel = PictureDetailViewModel(
+            repository = mockRepo,
+            storageHelper = mockStorageHelper,
+            rxSchedulers = TestAppRxSchedulersProvider(),
+            defaultId = "random-id"
+        )
         viewStateTester = viewModel.viewState.test()
     }
 
