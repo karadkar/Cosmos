@@ -1,9 +1,13 @@
 package io.github.karadkar.sample.gridui
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,6 +17,7 @@ import com.squareup.picasso.Picasso
 import io.github.karadkar.sample.R
 import io.github.karadkar.sample.databinding.ItemNasaPictureBinding
 import io.github.karadkar.sample.utils.gone
+import io.github.karadkar.sample.utils.logError
 import io.github.karadkar.sample.utils.visible
 
 class NasaPicturesListAdapter(
@@ -30,10 +35,12 @@ class NasaPicturesListAdapter(
         holder.bind(getItem(position))
     }
 
-    inner class ViewHolder(private val binding: ItemNasaPictureBinding) : RecyclerView.ViewHolder(binding.root),
-        View.OnClickListener, Callback {
+    inner class ViewHolder(
+        private val binding: ItemNasaPictureBinding
+    ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener, Callback, View.OnTouchListener {
         init {
             binding.root.setOnClickListener(this)
+            binding.root.setOnTouchListener(this)
         }
 
         fun bind(item: NasaPictureGridItem) {
@@ -56,6 +63,54 @@ class NasaPicturesListAdapter(
             binding.apply {
                 viewOverlay.visible()
                 ivImage.scaleType = ImageView.ScaleType.CENTER_CROP
+            }
+        }
+
+        override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+            if (event != null && v != null) {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        v.scaleDown()
+                    }
+                    MotionEvent.ACTION_CANCEL -> {
+                        v.scaleUp()
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        v.performClick()
+                        v.scaleUp()
+                    }
+                }
+                logError("")
+                return true // true indicates that we've handled .performClick()
+            } else {
+                return false
+            }
+        }
+
+        private val minScale = 0.9f
+        private val maxScale = 1f
+        private val scaleAnimationDuration = 150L
+
+        private fun View.scaleUp() {
+            val scaleXAnimation = ObjectAnimator.ofFloat(this, "scaleX", scaleX, maxScale)
+            val scaleYAnimation = ObjectAnimator.ofFloat(this, "scaleY", scaleY, maxScale)
+
+            val animSet = AnimatorSet().also {
+                it.playTogether(scaleXAnimation, scaleYAnimation)
+                it.duration = scaleAnimationDuration
+                it.interpolator = LinearInterpolator()
+                it.start()
+            }
+        }
+
+        private fun View.scaleDown() {
+            val scaleXAnimation = ObjectAnimator.ofFloat(this, "scaleX", scaleX, minScale)
+            val scaleYAnimation = ObjectAnimator.ofFloat(this, "scaleY", scaleY, minScale)
+            val animSet = AnimatorSet().also {
+                it.playTogether(scaleXAnimation, scaleYAnimation)
+                it.duration = scaleAnimationDuration
+                it.interpolator = LinearInterpolator()
+                it.start()
             }
         }
 
