@@ -4,7 +4,7 @@
  */
 object Versions {
     const val okHttpLogger = "4.3.0"
-    const val gradlePlugin = "4.1.2"
+    const val gradlePlugin = "4.2.1"
     const val archExtensions = "2.1.0"
     const val roomDb = "2.2.3"
     const val realmDbGradlePlugin = "6.1.0"
